@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>Reframe · 产品说明文档</title>
+<style>
+  @page{size:A4;margin:0}
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:#fff}
+  body{font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Segoe UI",sans-serif;color:#1A1C23;font-size:9.4pt;line-height:1.72}
+  .page{width:210mm;height:296.5mm;page-break-after:always;padding:15mm 16mm 13mm;position:relative;overflow:hidden;background:#fff}
+  .page:last-child{page-break-after:auto}
+
+  /* —— 版头版脚 —— */
+  .ph{position:absolute;top:8mm;left:16mm;right:16mm;display:flex;justify-content:space-between;align-items:center;
+    font-size:7.5pt;color:#8A8F9C;letter-spacing:1.2px}
+  .ph b{color:#B8860B;font-weight:700;letter-spacing:2px}
+  .pf{position:absolute;bottom:7mm;left:16mm;right:16mm;display:flex;justify-content:space-between;
+    font-size:7.5pt;color:#9AA0AC;border-top:1px solid #EDEEF1;padding-top:2.2mm}
+
+  /* —— 字体层级 —— */
+  .kicker{font-size:8pt;font-weight:700;letter-spacing:2.4px;color:#B8860B;margin-bottom:2.4mm}
+  h1{font-size:23pt;line-height:1.22;letter-spacing:-.5px;margin:0 0 3mm;font-weight:700}
+  h2{font-size:15pt;letter-spacing:-.3px;margin:0 0 2.6mm;font-weight:700}
+  h3{font-size:10.5pt;margin:0 0 1.6mm;font-weight:650}
+  p{margin:0 0 2.6mm;color:#33363E}
+  .lede{font-size:10.2pt;line-height:1.8;color:#2A2D35}
+  .small{font-size:8.4pt;color:#5A5F6A}
+  .dim{color:#8A8F9C}
+
+  /* —— 布局 —— */
+  .sec{margin-bottom:6.5mm}
+  .sec-t{display:flex;align-items:baseline;gap:2.4mm;margin-bottom:3mm}
+  .sec-n{font-size:8pt;font-weight:800;color:#B8860B;letter-spacing:1px}
+  .sec-t h2{margin:0}
+  .rule{height:1px;background:linear-gradient(90deg,#E8B530,rgba(232,181,48,0));margin-bottom:4mm}
+  .cols{display:flex;gap:6mm}
+  .cols>div{flex:1;min-width:0}
+
+  /* —— 组件 —— */
+  .onebox{background:#0E0F14;color:#F3F5F9;border-radius:4mm;padding:6mm 7mm;margin:4mm 0}
+  .onebox .kicker{color:#FFCE5C;margin-bottom:2mm}
+  .onebox .ot{font-size:13.5pt;font-weight:700;line-height:1.5;letter-spacing:-.2px}
+  .onebox .os{font-size:8.6pt;color:rgba(243,245,249,.62);margin-top:2mm;line-height:1.7}
+
+  .qbox{border-left:2.5px solid #E8B530;background:#FBF7EC;padding:2.6mm 4mm;margin:2.6mm 0;border-radius:0 2mm 2mm 0;font-size:9.2pt;color:#4A3E1A}
+
+  .tbl{width:100%;border-collapse:collapse;font-size:8.6pt}
+  .tbl th{text-align:left;font-size:8pt;color:#8A8F9C;font-weight:600;letter-spacing:.4px;padding:1.8mm 2.4mm;border-bottom:1.5px solid #2A2D35}
+  .tbl td{padding:1.9mm 2.4mm;border-bottom:1px solid #EDEEF1;vertical-align:top;color:#33363E;line-height:1.6}
+  .tbl tr:last-child td{border-bottom:0}
+  .tbl b{font-weight:650;color:#1A1C23}
+  .tbl .hl{background:#FBF7EC}
+  .tbl .y{color:#B45309;font-weight:700}
+  .tbl.dense th{padding:1.4mm 2.2mm}
+  .tbl.dense td{padding:1.5mm 2.2mm;font-size:8.3pt;line-height:1.55}
+  ul.tick.tight li{margin-bottom:1.1mm}
+  .page.p5 p{font-size:9.0pt;margin-bottom:2.1mm}
+  .page.p5 .sec-t{margin-bottom:2mm}
+  .page.p5 .rule{margin-bottom:2.8mm}
+  .page.p5 h3{margin-bottom:1.2mm}
+  .page.p5 .tbl.dense th{padding:1.2mm 2mm}
+  .page.p5 .tbl.dense td{padding:1.3mm 2mm;font-size:8.2pt;line-height:1.48}
+  .page.p5 ul.tick.tight li{font-size:8.3pt;margin-bottom:1mm;line-height:1.58}
+
+  .flow{display:flex;flex-wrap:wrap;gap:1.6mm;align-items:center;margin:2.4mm 0}
+  .fn{font-size:8pt;font-weight:600;background:#F4F5F8;border:1px solid #E2E4EA;border-radius:2mm;padding:1.6mm 2.6mm;color:#2A2D35;white-space:nowrap}
+  .fn.key{background:#0E0F14;color:#FFCE5C;border-color:#0E0F14}
+  .fn.warn{background:#FDF1F1;border-color:#F3C5C5;color:#B42318}
+  .arr{color:#B8860B;font-weight:700;font-size:8.5pt}
+  .nw{white-space:nowrap;display:inline-flex;align-items:center;gap:1.6mm}
+
+  .shots{display:grid;grid-template-columns:repeat(4,1fr);gap:3.4mm}
+  .shot img{width:100%;border-radius:2.6mm;border:1px solid #E2E4EA;display:block}
+  .shot .sl{font-size:7.6pt;color:#5A5F6A;text-align:center;margin-top:1.4mm;line-height:1.45}
+
+  ul.tick{margin:0;padding:0;list-style:none}
+  ul.tick li{position:relative;padding-left:4.6mm;margin-bottom:1.7mm;color:#33363E;font-size:9.2pt;line-height:1.66}
+  ul.tick li::before{content:'';position:absolute;left:0;top:2.5mm;width:1.9mm;height:1.9mm;border-radius:50%;background:#E8B530}
+  ul.tick li b{font-weight:650}
+
+  .q{font-size:9pt;font-weight:700;color:#B8860B;letter-spacing:.4px;margin:3.2mm 0 1mm}
+  .q:first-child{margin-top:0}
+
+  .persona{display:flex;gap:5mm;align-items:flex-start;background:#F4F5F8;border:1px solid #E2E4EA;border-radius:3.4mm;padding:4mm 5mm;margin:3mm 0}
+  .avatar{width:14mm;height:14mm;flex:none;border-radius:50%;background:linear-gradient(140deg,#FFD166,#FF7A2F);display:grid;place-items:center;color:#3A2705;font-weight:800;font-size:13pt}
+  .persona b{font-weight:650}
+  .persona .pt{font-size:8pt;color:#8A8F9C;letter-spacing:.6px;margin-bottom:1mm}
+
+  .nosec{background:#FFF9F0;border:1px solid #F0E3C0;border-radius:3.4mm;padding:3.6mm 4.4mm}
+  .nosec h3{font-size:9.6pt;margin-bottom:1.4mm}
+</style>
+</head>
+<body>
+
+<!-- ================= P1 ================= -->
+<div class="page">
+  <div class="ph"><b>REFRAME</b><span>产品说明文档 · 一条视频，四个货架</span></div>
+  <div style="height:6mm"></div>
+
+  <div class="kicker">AI 与内容创作 · 独立产品提案</div>
+  <h1>Reframe<br><span style="font-size:13pt;font-weight:500;color:#5A5F6A">一条视频，四个货架</span></h1>
+  <p class="lede">面向新兴市场内容电商的 AI 视频再版工具 —— 一款独立的第三方产品，不属于任何现有剪辑工具或平台。</p>
+
+  <div class="onebox">
+    <div class="kicker">一句话概括</div>
+    <div class="ot">帮新兴市场的带货小卖家，把一条已经拍好的视频，<br>自动改写成 TikTok / Reels / Shorts / Kwai 各自愿意推的版本 ——<br>尺寸、前 3 秒钩子、字幕语言与排版、音乐版权、封面，一次出齐。</div>
+    <div class="os">不是再做一个“AI 生成视频”。画面是用户自己拍的，AI 只负责把同一份内容资产，翻译成不同平台语境下能拿到流量的样子。</div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-t"><span class="sec-n">01</span><h2>为什么选这个题</h2></div>
+    <div class="rule"></div>
+    <ul class="tick">
+      <li><b>“生成”已经不稀缺，“再版”还是空白。</b>2024–2026 年的 AI 视频产品几乎都在卷“从 0 生成画面”，但一条内容在四个平台各火一遍的麻烦——改尺寸、换钩子、避 UI、查音乐版权——至今没有任何产品替个体卖家解决。</li>
+      <li><b>每条视频都有直接经济回报。</b>对小卖家来说，多发一个平台 = 多一次出单机会。痛点不是“创作表达”，是生计，所以留存和付费意愿都可验证。</li>
+      <li><b>赛道位置站得住：</b>AI 视频的产能集中在“生成”，而“同一内容跨市场再版”这一层的商业价值已被 B 端译制 / 本地化业务验证过，却还没有人把它做成个体卖家手边的工具。</li>
+    </ul>
+  </div>
+
+  <div class="sec">
+    <div class="sec-t"><span class="sec-n">02</span><h2>产品定位与边界</h2></div>
+    <div class="rule"></div>
+    <table class="tbl">
+      <tr><th style="width:26mm">维度</th><th>结论</th></tr>
+      <tr class="hl"><td><b>目标市场</b></td><td>巴西 / 印尼 / 中东。<b>先单点打穿巴西葡语</b>——四个平台都在、个体卖家密度最高、音乐版权问题最尖锐，规则差异最能被验证</td></tr>
+      <tr><td><b>目标用户</b></td><td>1–3 人的带货小卖家与小团队，月发 8–20 条，一个人包办选品、拍摄、发货、客服</td></tr>
+      <tr><td><b>产品形态</b></td><td>移动端 App 为主（拍摄与发布都发生在手机上）；桌面端只承担批量处理与团队审阅</td></tr>
+      <tr><td><b>商业模式</b></td><td>按月订阅，按改写次数分档；团队版按席位，可导出货架手册作为协作标准</td></tr>
+      <tr><td><b>明确的边界</b></td><td>不生成新画面、不做自动发布、不做评论区运营、不做全平台接入 —— 详见第 4 页的「主动没有做的功能」</td></tr>
+    </table>
+  </div>
+  <div class="pf"><span>Reframe · 产品原型提案</span><span>1 / 5</span></div>
+</div>
+
+<!-- ================= P2 ================= -->
+<div class="page">
+  <div class="ph"><b>REFRAME</b><span>用户场景</span></div>
+
+  <div class="sec">
+    <div class="sec-t"><span class="sec-n">03</span><h2>用户场景：一次具体的放弃</h2></div>
+    <div class="rule"></div>
+
+    <div class="persona">
+      <div class="avatar">L</div>
+      <div>
+        <div class="pt">目标用户 · 不是“内容创作者”</div>
+        <b>Lina，29 岁，圣保罗 TikTok Shop 小卖家</b>，卖均价 R$19.9 的平价饰品。一个人选品、拍摄、打包、客服。一条视频从拍摄到发出平均 1.5 小时。
+      </div>
+    </div>
+
+    <p><b>她想完成什么：</b>周四晚上 9 点，她刚打包完今天的订单，新到的三件套耳环有一条 38 秒的随手拍。热点的生命周期是 4–5 个小时，她想赶在今天发掉，而且发到四个平台——因为她知道同一条素材在不同货架上的流量天差地别。</p>
+
+    <p><b>她目前的困难：</b>同一条视频要发四遍，每一遍都是不同的活：</p>
+    <ul class="tick">
+      <li>TikTok 要求前 3 秒有钩子，她那条的开头是一段产品特写；</li>
+      <li>贴底的字幕在 Shorts 上会被订阅条压住，她上次被压过一次；</li>
+      <li>配的那首 funk 在 Reels 巴西曲库没有商用授权，上线会被静音；</li>
+      <li>Kwai 的封面要有人脸高饱和才有人点，她懒得单独做封面。</li>
+    </ul>
+    <p>手动改完四个版本大约 40 分钟。她改了 12 分钟就放弃了，只发了 TikTok。<b>当晚的 Reels 和 Shorts 流量是零。</b></p>
+
+    <div class="qbox">为什么值得解决：她的每条视频都对应真实订单（完播 → 进店 → 出单）。少发一个平台不是少一个作品，是少一次收入。这种“放弃”每天都在发生。</div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-t"><span class="sec-n">04</span><h2>问题的结构：不是剪辑难，是语境翻译难</h2></div>
+    <div class="rule"></div>
+    <table class="tbl">
+      <tr><th style="width:30mm">痛点层</th><th>现状</th><th style="width:44mm">现有方案为什么不够</th></tr>
+      <tr><td><b>决策</b></td><td>这条到底发不发、发哪几个平台</td><td>剪映/ CapCut 不管决策，只交付剪辑工具</td></tr>
+      <tr><td><b>改写</b></td><td>同一条内容在四个平台是四种“合规 + 语境”</td><td>批量导出工具只改尺寸，不改钩子和语境</td></tr>
+      <tr class="hl"><td><b>沉淀</b></td><td>这次学到的规则，下次要用同一套</td><td>所有工具都是单次任务，经验不累积</td></tr>
+    </table>
+    <p class="small" style="margin-top:2mm">所以 Reframe 的核心不是“更快剪完”，而是：<b>把每个平台“愿意推什么”的规则变成可累积、可复用、可修改的资产。</b></p>
+  </div>
+  <div class="pf"><span>Reframe · 产品原型提案</span><span>2 / 5</span></div>
+</div>
+
+<!-- ================= P3 ================= -->
+<div class="page">
+  <div class="ph"><b>REFRAME</b><span>产品流程与演示覆盖</span></div>
+
+  <div class="sec">
+    <div class="sec-t"><span class="sec-n">05</span><h2>核心流程：从一条素材到四个可发布的版本</h2></div>
+    <div class="rule"></div>
+    <div class="flow" style="font-size:8pt">
+      <span class="nw"><span class="fn key">进入</span><span class="arr">→</span></span>
+      <span class="nw"><span class="fn">导入源视频</span><span class="arr">→</span></span>
+      <span class="nw"><span class="fn">素材体检</span><span class="arr">→</span></span>
+      <span class="nw"><span class="fn">选平台（摊开规则）</span><span class="arr">→</span></span>
+      <span class="nw"><span class="fn">改写中</span><span class="arr">→</span></span>
+      <span class="nw"><span class="fn key">四版输出</span><span class="arr">→</span></span>
+      <span class="nw"><span class="fn">单版微调</span><span class="arr">→</span></span>
+      <span class="nw"><span class="fn">导出排期</span><span class="arr">→</span></span>
+      <span class="fn">规则沉淀 · 数据回流</span>
+    </div>
+    <div class="flow" style="font-size:8pt">
+      <span class="arr">失败分支：</span>
+      <span class="nw"><span class="fn warn">第 2 步超时</span><span class="arr">→</span></span>
+      <span class="nw"><span class="fn warn">本地模板兜底（降级可见，不扣次数）</span><span class="arr">→</span></span>
+      <span class="fn warn">AI 精剪继续排队，好了覆盖</span>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-t"><span class="sec-n">06</span><h2>关键界面（选自原型）</h2></div>
+    <div class="rule"></div>
+    <div class="shots">
+      <div class="shot"><img src="reframe/shots/enter.png" alt="封面"><div class="sl">进入 · 一条视频四个货架<br>最近项目直达续作</div></div>
+      <div class="shot"><img src="reframe/shots/output.png" alt="四版输出"><div class="sl">四版输出 · 钩子/字幕/音乐<br>各不相同，可追问原因</div></div>
+      <div class="shot"><img src="reframe/shots/fail.png" alt="失败归因"><div class="sl">失败归因到步骤 · 不扣次数<br>三条出路任选</div></div>
+      <div class="shot"><img src="reframe/shots/fix.png" alt="结果不理想"><div class="sl">结果不理想 · 安全区可视化<br>指认一次沉淀成永久规则</div></div>
+    </div>
+    <p class="small" style="margin-top:2mm">素材体检、平台规则摊开、改写中的日志态等界面请在原型中查看（共 13 屏）。</p>
+  </div>
+
+  <div class="sec">
+    <div class="sec-t"><span class="sec-n">07</span><h2>一次走查能看到什么</h2></div>
+    <div class="rule"></div>
+    <table class="tbl">
+      <tr><th style="width:40mm">节点</th><th>原型中的落点</th></tr>
+      <tr><td><b>用户如何进入产品</b></td><td>封面首屏 + 「最近项目」续作入口；无注册墙</td></tr>
+      <tr><td><b>如何开始操作</b></td><td>从相册随手拍或已发布链接开始，默认选中最近一条</td></tr>
+      <tr><td><b>核心功能流程</b></td><td>体检 → 选平台 → 改写 → 四版输出 → 微调，全程 13 屏可点</td></tr>
+      <tr><td><b>输出什么结果</b></td><td>四个可直接发布的版本 + SRT 字幕 + 封面 + 排期</td></tr>
+      <tr><td><b>加载 / 失败 / 不理想</b></td><td>带真实日志的进度态；第 2 步超时 → 本地模板降级；Shorts 字幕被压 → 修正方案 + 规则沉淀</td></tr>
+      <tr><td><b>完成后还能做什么</b></td><td>按数据建议发布时间并排期；规则手册沉淀复用；48h 数据回流设为默认</td></tr>
+    </table>
+  </div>
+  <div class="pf"><span>Reframe · 产品原型提案</span><span>3 / 5</span></div>
+</div>
+
+<!-- ================= P4 ================= -->
+<div class="page">
+  <div class="ph"><b>REFRAME</b><span>产品判断</span></div>
+
+  <div class="sec">
+    <div class="sec-t"><span class="sec-n">08</span><h2>取舍：我做了什么判断，没做什么功能</h2></div>
+    <div class="rule"></div>
+
+    <div class="q">为什么是这个用户和这个场景</div>
+    <p>三个理由：① 她的痛点有<b>直接经济回报</b>，多一个平台 = 多一次出单，留存与付费意愿都可验证；② 场景高度具体（打包完 / 手机 / 热点 4 小时倒计时），可设计、可埋点、可实验；③ 现有工具卡在“语境翻译”这一层，剪映、批量导出、AI 生成各解决一段，没人管“同一内容 × 四个货架”的整体性。</p>
+
+    <div class="q">最核心的问题</div>
+    <p><b>不是剪辑效率，是内容资产的跨语境再版成本。</b>流量规则每天都在变，但今天这些知识散落在平台文档、卖家社群和一次次失败里，没有任何工具把它变成个体卖家的可复用资产。</p>
+
+    <div class="q">为什么是这个流程</div>
+    <p>「体检 → 摊开规则 → 再动手」的顺序是刻意的：先让用户看到 AI 读对了什么、说错了什么，再让它动手，才能把“成片不理想”的责任边界划清（用户不会把“我拍得暗”归因为“AI 不行”）。而每个改动都附“为什么这样改 + 来源 + 置信度”，是把黑盒优化变成可审阅的协作。</p>
+
+    <div class="q">主动没有做的功能（以及原因）</div>
+    <table class="tbl">
+      <tr><th style="width:34mm">没做</th><th>原因</th></tr>
+      <tr><td><b>AI 生成新画面 / 数字人</b></td><td>她卖的是真货实拍，虚构画面伤信任，且和“生成”赛道正面相撞</td></tr>
+      <tr><td><b>自动发布 / 评论区运营</b></td><td>平台 API 门槛与风控高，MVP 阶段投入产出不成立</td></tr>
+      <tr><td><b>大而全的数据看板</b></td><td>她只看一件事：哪个钩子、哪个平台在赚钱；其余指标是噪音</td></tr>
+      <tr><td><b>接入所有平台</b></td><td>规则引擎的维护成本随平台数线性涨，先做 Top 4 把质量打穿</td></tr>
+      <tr><td><b>多人协作工作区</b></td><td>个体卖家阶段没有协作对象，审阅链接已是最低成本</td></tr>
+    </table>
+
+    <div class="q">如果只能保留一个核心功能</div>
+    <p><b>平台规则引擎（含“我的货架手册”）。</b>自动剪辑、换钩子、配音乐行业里谁都能做；只有“把每次改写学到的规则沉淀下来、下次自动生效”是别人复制不了的积累——它让产品越用越聪明，而不是每次从零开始。</p>
+
+    <div class="q">最可能失败的地方</div>
+    <p><b>平台规范频繁变动，规则引擎的维护成本会吃掉毛利</b>——解法是把“平台官方规则”和“用户自己验证过的规则”分层，官方层自动同步、用户层置信度加权。第二风险：个体卖家付费能力可能弱于想象，因此定价必须压在“一条多出的订单”以下。第三风险：平台官方下场做一键分发，所以差异化必须押在“跨平台 + 用户私有规则资产”上。</p>
+  </div>
+  <div class="pf"><span>Reframe · 产品原型提案</span><span>4 / 5</span></div>
+</div>
+
+<!-- ================= P5 ================= -->
+<div class="page p5">
+  <div class="ph"><b>REFRAME</b><span>喜欢的产品 · AI 使用情况</span></div>
+
+  <div class="sec">
+    <div class="sec-t"><span class="sec-n">09</span><h2>我最喜欢的一个功能：剪映的「识别字幕」</h2></div>
+    <div class="rule"></div>
+    <p><b>真实场景与解决的问题：</b>剪自己的产品演示视频时，3–5 分钟中文口播，最早用 Premiere 一句句听打，光字幕就要 40 分钟。识别字幕把「听打 → 对时间轴 → 排版」压成一次点击，准确率足够高，只剩校对；省下的时间被用在真正需要判断的地方：哪句话该删、哪里该停顿。</p>
+    <p><b>哪个设计特别好：</b>识别完的字幕不是死的文本，而是<b>与时间轴双向绑定</b>——拖字幕块，视频跟着跳；改文字，时间轴不动。它把 AI 的输出放在「人能顺手改」的位置，而不是生成一份只能整体重来的结果。</p>
+    <p><b>为什么有效：</b>机械劳动交给 AI，判断留给人——AI 先把事做到 80 分，人在原地补到 95 分，而不是被请出流程。<b>如果只能改一处：</b>我会加跨语言字幕联动（中文识别完一键出英文字幕并保持时间轴对齐）。这也直接启发了 Reframe：同一素材，语境不同就该有各自的版本。</p>
+  </div>
+
+  <div class="sec" style="margin-bottom:0">
+    <div class="sec-t"><span class="sec-n">10</span><h2>AI 工具使用情况</h2></div>
+    <div class="rule"></div>
+    <p class="small" style="margin-bottom:2.2mm">AI 是<b>分阶段的协作者</b>：调研与立项阶段做资料压缩和对抗性提问，原型阶段出第一稿。「要不要做、做成什么样」的决定始终由我自己下。</p>
+
+    <table class="tbl dense">
+      <tr><th style="width:24mm">阶段</th><th style="width:62mm">使用 / 参考的 AI 工具与插件</th><th>我自己的判断与产出</th></tr>
+      <tr><td><b>① 机会识别<br>与市场调研</b></td><td>Perplexity / Deep Research 跨语种检索；NotebookLM 做可提问的卖家自述知识库；Similarweb / Sensor Tower 核对流量基数</td><td>40 余份卖家自述按痛点分层后，判定空位在「再版」而非「生成」；据此排除数字人、AI 口播整类方向</td></tr>
+      <tr><td><b>② 立项与<br>商业论证</b></td><td>Claude 对立面质询（扮投资人挑 BRD 毛病）；Gamma 生成立项叙事；表格 + Copilot 测算分档定价</td><td>Go / Kill 由我下：用「一条多出的订单」反推价格上限，据此砍掉自动发布与多账号矩阵</td></tr>
+      <tr><td><b>③ 业务调研<br>与需求分析</b></td><td>飞书妙记 / Otter.ai 转写访谈；Dovetail 归集需求；Notion AI 做需求聚类</td><td>需求排序改用「损失口径」而非「频次」：少发一个平台 = 少一笔订单；据此把规则沉淀从 v2 提到 v1</td></tr>
+      <tr><td><b>④ 概念原型</b></td><td>v0 / MasterGo AI 出界面草图；Figma 做交互连线；Midjourney 做视觉参考；WorkBuddy 生成 HTML 原型</td><td>视觉方向、13 屏信息架构、每屏文案由我逐句改写；动效按 120 / 200 / 320ms 三档定优先级</td></tr>
+      <tr><td><b>⑤ 开发启动<br>决策</b></td><td>Cursor / Claude Code 做代码审查；WorkBuddy 编排无头浏览器出图与 PDF 排版</td><td>MVP 边界、埋点清单、「先做 Top 4 平台」的取舍由我决定；规则引擎官方 / 用户分层由我设计</td></tr>
+    </table>
+
+    <div class="cols" style="margin-top:2.6mm">
+      <div>
+        <h3>AI 输出不符合预期的地方</h3>
+        <ul class="tick tight" style="font-size:8.5pt">
+          <li>初期方向建议是<b>「AI 生成带货视频」</b>——红海，且违背「卖真货实拍」的信任前提，整条否定。</li>
+          <li>平台规则里的数字<b>是它编的</b>（如「完播提升 47%」），无法溯源。</li>
+          <li>原型首版是通用深色模板：<b>卡片等大排列、动效堆砌、文案是口号与占位符</b>。</li>
+          <li>商业论证倾向罗列 TAM/SAM/SOM，对「个体卖家付费能力有限」这个反驳<b>一笔带过</b>。</li>
+        </ul>
+      </div>
+      <div>
+        <h3>我据此做的修改</h3>
+        <ul class="tick tight" style="font-size:8.5pt">
+          <li>方向从「生成」改为「再版」，并把<b>规则沉淀定为 v1 必做</b>。</li>
+          <li>平台规则全部改为可核实的公开规范，数据一律改<b>区间表述</b>。</li>
+          <li>重写 13 屏全部文案，删掉占位符与口号；卡片改为带信息层级的不等大排列，动效压缩到<b>三档时长</b>。</li>
+          <li>把反驳写进正文：新增「最可能失败的地方」三问，推翻原本的市场规模叙事。</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3 style="margin-top:2.2mm">以下内容从头到尾由我自己完成</h3>
+    <div class="cols">
+      <div>
+        <ul class="tick tight" style="font-size:8.5pt">
+          <li><b>选题与用户场景</b>：Lina 的画像与「一次具体的放弃」，来自我对卖家自述的归纳。</li>
+          <li><b>全部产品判断</b>：为什么是她、核心问题、不做什么、只留一个功能、最可能失败——六问均为本人判断。</li>
+          <li><b>13 屏信息架构与逐屏文案</b>：含失败归因、安全区可视化、规则抽屉结构。</li>
+        </ul>
+      </div>
+      <div>
+        <ul class="tick tight" style="font-size:8.5pt">
+          <li><b>视觉方向与动效优先级</b>：单一强调色、三档时长、每屏只留一个强信息点。</li>
+          <li><b>逐屏验收</b>：13 屏逐张看过，修复 5 处裁切 / 错位 / 动画定格问题。</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="pf"><span>Reframe · 产品原型提案</span><span>5 / 5</span></div>
+</div>
+
+</body>
+</html>

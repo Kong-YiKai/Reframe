@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Reframe · 一条视频，四个货架</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<svg style="display:none" aria-hidden="true">
+  <symbol id="i-back" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-next" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-up" viewBox="0 0 24 24"><path d="M12 16V6m0 0l-4 4m4-4l4 4M5 20h14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 8v5m0 3.5v.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+  <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.6-5.9M20 4v4h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-book" viewBox="0 0 24 24"><path d="M5 4h9a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3V4z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 9h5M9 13h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+  <symbol id="i-cal" viewBox="0 0 24 24"><rect x="4" y="6" width="16" height="14" rx="3" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M4 10h16M9 3v4M15 3v4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+  <symbol id="i-chart" viewBox="0 0 24 24"><path d="M5 19V9m5 10V5m5 14v-7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></symbol>
+  <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+  <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8L12 3z" fill="currentColor"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 8v4.5l3 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+  <symbol id="i-down" viewBox="0 0 24 24"><path d="M12 5v10m0 0l-4-4m4 4l4-4M5 19h14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><path d="M8 5l11 7-11 7V5z" fill="currentColor"/></symbol>
+  <symbol id="i-link" viewBox="0 0 24 24"><path d="M9.5 14.5l5-5M11 7l1.5-1.5a4 4 0 0 1 5.7 5.7L16.7 12.8M13 17l-1.5 1.5a4 4 0 0 1-5.7-5.7L7.3 11.2" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></symbol>
+</svg>
+
+<div class="stage">
+
+  <!-- ================= REVIEWER RAIL ================= -->
+  <aside class="rail">
+    <div class="rail-brand">
+      <div class="logo"><span class="lg-m"></span></div>
+      <div>
+        <div class="lg-t">REFRAME</div>
+        <div class="lg-s">可点击原型 · v0.9</div>
+      </div>
+    </div>
+
+    <nav class="rail-steps" id="railSteps"></nav>
+
+    <div class="rail-body">
+      <div class="tag-row" id="railTags"></div>
+      <h2 id="railTitle">—</h2>
+      <ul class="rail-ul" id="railUl"></ul>
+      <div class="note">
+        <div class="note-h">产品判断</div>
+        <div class="note-t" id="railNote">—</div>
+      </div>
+    </div>
+
+    <div class="rail-foot">
+      <button class="rf-btn" id="btnPrev"><svg class="ic"><use href="#i-back"/></svg>上一屏</button>
+      <button class="rf-btn pri" id="btnNext">下一屏<svg class="ic"><use href="#i-next"/></svg></button>
+    </div>
+  </aside>
+
+  <!-- ================= DEVICE ================= -->
+  <main class="devwrap">
+    <div class="phone">
+      <div class="p-glow"></div>
+      <div class="p-bezel">
+        <div class="p-screen">
+          <div class="statusbar">
+            <span class="sb-t">21:31</span>
+            <span class="island"></span>
+            <span class="sb-r"><i class="sb-sig"></i><i class="sb-wifi"></i><i class="sb-bat"></i></span>
+          </div>
+          <div class="screens" id="screens">
+
+            <!-- ---------- 1. ENTER ---------- -->
+            <section class="scr is-on" id="scr-enter">
+              <div class="sc cover">
+                <div class="cover-art">
+                  <div class="ca-stack">
+                    <div class="ca-cell ca-a"><span class="ca-cap">TikTok</span></div>
+                    <div class="ca-cell ca-b"><span class="ca-cap">Reels</span></div>
+                    <div class="ca-cell ca-c"><span class="ca-cap">Shorts</span></div>
+                    <div class="ca-cell ca-d"><span class="ca-cap">Kwai</span></div>
+                  </div>
+                </div>
+                <div class="kicker" data-anim style="--i:0">AI CONTENT REFRAME</div>
+                <h1 class="display" data-anim style="--i:1">一条视频，<br>四个货架</h1>
+                <p class="lede" data-anim style="--i:2">把你已经拍好的那条，改写成 TikTok、Reels、Shorts、Kwai <b>各自愿意推</b>的版本。<br><span class="dim">不生成新画面，只做再版。</span></p>
+                <button class="btn pri lg" data-go="import" data-anim style="--i:3">导入一条视频</button>
+                <button class="btn ghost" data-go="output" data-anim style="--i:4">先看做好的样子</button>
+
+                <div class="recent" data-anim style="--i:5">
+                  <div class="sec-label">最近</div>
+                  <div class="rc" data-go="output"><i class="pdot" style="--pc:#E1306C"></i><div class="rc-t"><b>07-14 耳环三条装 · 挂车</b><span>已发 4 平台 · 葡语</span></div><span class="tag ok">+31% 完播</span></div>
+                  <div class="rc" data-go="output"><i class="pdot" style="--pc:#FF8A00"></i><div class="rc-t"><b>07-11 发圈测评 · 口播</b><span>已发 3 平台 · 印尼语</span></div><span class="tag">草稿</span></div>
+                </div>
+              </div>
+            </section>
+
+            <!-- ---------- 2. IMPORT ---------- -->
+            <section class="scr" id="scr-import">
+              <div class="navbar"><button class="ibtn" data-go="enter"><svg class="ic"><use href="#i-back"/></svg></button><span class="nb-t">改写一条</span><span class="nb-step">1 / 4</span></div>
+              <div class="sc">
+                <div class="progress-line"><i style="width:25%"></i></div>
+                <h3 class="h3" data-anim style="--i:0">选择源视频</h3>
+                <p class="sub" data-anim style="--i:1">它可以是相册里的一段随手拍，也可以是已经发布过的链接。</p>
+
+                <div class="dropzone" data-anim style="--i:2">
+                  <svg class="ic lg"><use href="#i-up"/></svg>
+                  <div class="dz-t">拖到这里，或 <b>从相册选择</b></div>
+                  <div class="dz-s">MP4 / MOV · 竖屏横屏都行 · 最长 10 分钟</div>
+                </div>
+                <div class="orline"><span>或</span></div>
+                <div class="link-in" data-anim style="--i:3"><svg class="ic"><use href="#i-link"/></svg><span>粘贴 TikTok / YouTube 链接</span></div>
+
+                <div class="sec-label mt">最近的素材</div>
+                <div class="media-grid">
+                  <div class="mi on"><div class="mi-th"><span class="mi-play"><svg class="ic"><use href="#i-play"/></svg></span><span class="mi-dur">0:38</span></div><span class="mi-n">IMG_4821</span><i class="mi-ck"><svg class="ic"><use href="#i-check"/></svg></i></div>
+                  <div class="mi"><div class="mi-th"><span class="mi-dur">0:22</span></div><span class="mi-n">IMG_4770</span></div>
+                  <div class="mi"><div class="mi-th"><span class="mi-dur">1:04</span></div><span class="mi-n">IMG_4709</span></div>
+                  <div class="mi"><div class="mi-th"><span class="mi-dur">0:15</span></div><span class="mi-n">IMG_4688</span></div>
+                </div>
+
+                <div class="bottom-bar">
+                  <button class="btn pri bl" data-go="brief">用这条开始<svg class="ic"><use href="#i-next"/></svg></button>
+                </div>
+              </div>
+            </section>
+
+            <!-- ---------- 3. BRIEF ---------- -->
+            <section class="scr" id="scr-brief">
+              <div class="navbar"><button class="ibtn" data-go="import"><svg class="ic"><use href="#i-back"/></svg></button><span class="nb-t">改写一条</span><span class="nb-step">2 / 4</span></div>
+              <div class="sc">
+                <div class="progress-line"><i style="width:50%"></i></div>
+                <h3 class="h3" data-anim style="--i:0">先看看这条片子底子如何</h3>
+
+                <div class="src-row" data-anim style="--i:1">
+                  <div class="vframe xs"><div class="vscene s1"><i class="obj"></i><i class="glow"></i><i class="grain"></i></div><span class="v-badge">源片</span></div>
+                  <div class="src-meta">
+                    <div class="sm-t">IMG_4821.mp4</div>
+                    <div class="chiprow">
+                      <span class="chip">0:38</span><span class="chip">9:16</span><span class="chip">葡语 pt-BR</span><span class="chip">有人声口播</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="card" data-anim style="--i:2">
+                  <div class="card-h"><svg class="ic"><use href="#i-spark"/></svg>AI 读到的内容</div>
+                  <div class="kv"><span>品类</span><b>平价饰品（均价 R$19.9）</b></div>
+                  <div class="kv"><span>卖点</span><b>三件包邮 · 今日发货</b></div>
+                  <div class="kv"><span>现有开头</span><b>“看这里 ❯ 三个颜色”</b></div>
+                  <div class="kv"><span>现有字幕</span><b>葡语，贴底 3% 处</b></div>
+                  <div class="kv"><span>背景音乐</span><b>葡语 local funk（非授权曲库）</b></div>
+                </div>
+
+                <div class="card warn" data-anim style="--i:3">
+                  <div class="card-h"><svg class="ic"><use href="#i-alert"/></svg>有 3 处必须重做</div>
+                  <div class="issue"><i>01</i><div><b>前 3 秒没有钩子</b><span>开头是产品特写，没有任何提问或冲突</span></div></div>
+                  <div class="issue"><i>02</i><div><b>字幕压在平台 UI 上</b><span>贴底字幕会被 TikTok / Shorts 的文案区遮住</span></div></div>
+                  <div class="issue"><i>03</i><div><b>音乐拿不到商用授权</b><span>Reels 巴西曲库里没有这首，上线有静音风险</span></div></div>
+                </div>
+
+                <div class="bottom-bar">
+                  <button class="btn pri bl" data-go="platforms">选择要发到哪里<svg class="ic"><use href="#i-next"/></svg></button>
+                </div>
+              </div>
+            </section>
+
+            <!-- ---------- 4. PLATFORMS ---------- -->
+            <section class="scr" id="scr-platforms">
+              <div class="navbar"><button class="ibtn" data-go="brief"><svg class="ic"><use href="#i-back"/></svg></button><span class="nb-t">改写一条</span><span class="nb-step">3 / 4</span></div>
+              <div class="sc">
+                <div class="progress-line"><i style="width:75%"></i></div>
+                <h3 class="h3" data-anim style="--i:0">发到哪里</h3>
+                <p class="sub" data-anim style="--i:1">每家货架的规矩不一样，改写规则也不同。</p>
+
+                <div class="plat-list">
+                  <div class="plat on" data-anim style="--i:2;--pc:#25F4EE">
+                    <div class="pl-h"><i class="pdot big"></i><div><b>TikTok</b><span>巴西 · 2.1 亿月活</span></div><span class="pl-chk"><svg class="ic"><use href="#i-check"/></svg></span></div>
+                    <div class="pl-r"><span>时长</span><b>21–34s</b></div>
+                    <div class="pl-r"><span>前 3 秒</span><b>必须有钩子，否则推荐池进不去</b></div>
+                    <div class="pl-r"><span>字幕</span><b>中置偏下，避开右下挂车</b></div>
+                    <div class="pl-r"><span>音乐</span><b>必须商用曲库</b></div>
+                    <div class="pl-d">待改 4 处</div>
+                  </div>
+
+                  <div class="plat on" data-anim style="--i:3;--pc:#E1306C">
+                    <div class="pl-h"><i class="pdot big"></i><div><b>Instagram Reels</b><span>巴西 · 探索页为主要流量</span></div><span class="pl-chk"><svg class="ic"><use href="#i-check"/></svg></span></div>
+                    <div class="pl-r"><span>时长</span><b>15–30s</b></div>
+                    <div class="pl-r"><span>版式</span><b>顶部要给探索栏留白 8%</b></div>
+                    <div class="pl-r"><span>字幕</span><b>居中，短句优先</b></div>
+                    <div class="pl-r"><span>音乐</span><b>曲库受限（待替换）</b></div>
+                    <div class="pl-d">待改 5 处</div>
+                  </div>
+
+                  <div class="plat on" data-anim style="--i:4;--pc:#FF4E45">
+                    <div class="pl-h"><i class="pdot big"></i><div><b>YouTube Shorts</b><span>巴西 · 长尾流量最好的一个</span></div><span class="pl-chk"><svg class="ic"><use href="#i-check"/></svg></span></div>
+                    <div class="pl-r"><span>时长</span><b>≤ 60s</b></div>
+                    <div class="pl-r"><span>封面</span><b>首页看得到，需要标题条</b></div>
+                    <div class="pl-r"><span>字幕</span><b>左右各留 12% 安全边距</b></div>
+                    <div class="pl-r"><span>结尾</span><b>加 3 秒引导订阅</b></div>
+                    <div class="pl-d">待改 3 处</div>
+                  </div>
+
+                  <div class="plat on" data-anim style="--i:5;--pc:#FF8A00">
+                    <div class="pl-h"><i class="pdot big"></i><div><b>Kwai</b><span>巴西 / 印尼 · 下沉市场最凶</span></div><span class="pl-chk"><svg class="ic"><use href="#i-check"/></svg></span></div>
+                    <div class="pl-r"><span>时长</span><b>15–25s</b></div>
+                    <div class="pl-r"><span>前 2 秒</span><b>钩子要比 TikTok 更冲</b></div>
+                    <div class="pl-r"><span>封面</span><b>人脸 + 高饱和才有人点</b></div>
+                    <div class="pl-r"><span>音乐</span><b>本地 funk / phonk</b></div>
+                    <div class="pl-d">待改 4 处</div>
+                  </div>
+                </div>
+
+                <div class="bottom-bar">
+                  <div class="bb-i"><b>已选 4 个</b><span>预计 2 分 10 秒 · 消耗 4 次改写</span></div>
+                  <button class="btn pri bl" data-go="processing">开始改写<svg class="ic"><use href="#i-next"/></svg></button>
+                </div>
+              </div>
+            </section>
+
+            <!-- ---------- 5. PROCESSING ---------- -->
+            <section class="scr" id="scr-processing">
+              <div class="navbar"><button class="ibtn" data-go="platforms"><svg class="ic"><use href="#i-back"/></svg></button><span class="nb-t">正在改写</span><span class="nb-step">4 / 4</span></div>
+              <div class="sc">
+                <div class="work-ring">
+                  <div class="wr-ring"><svg viewBox="0 0 120 120"><circle class="wr-bg" cx="60" cy="60" r="52"/><circle class="wr-fg" cx="60" cy="60" r="52"/></svg><span class="wr-num" id="procPct">0<i>%</i></span></div>
+                  <div class="wr-t" id="procStage">解析源片</div>
+                  <div class="wr-s" id="procSub">这步在读的人和货要对得上</div>
+                </div>
+
+                <div class="steps">
+                  <div class="st done"><i class="st-d"><svg class="ic"><use href="#i-check"/></svg></i><div><b>解析源片</b><span>抽出 6 个可用片段</span></div><span class="st-x">1.2s</span></div>
+                  <div class="st act" id="st2"><i class="st-d pulse"></i><div><b>生成钩子文案</b><span>按 4 个平台各写 3 条候选</span></div><span class="st-x">…</span></div>
+                  <div class="st"><i class="st-d"></i><div><b>重排版式与字幕</b><span>避开各家 UI 的安全区</span></div><span class="st-x">待</span></div>
+                  <div class="st"><i class="st-d"></i><div><b>合规音乐与封面</b><span>替换为商用曲库曲目</span></div><span class="st-x">待</span></div>
+                </div>
+
+                <div class="log" id="procLog">
+                  <div class="log-l"><i class="ldot"></i>已识别 12 个有效口播片段</div>
+                </div>
+
+                <div class="ghost-note"><svg class="ic"><use href="#i-clock"/></svg>关掉 App 也会继续，好了会推给你</div>
+                <div class="bottom-bar center">
+                  <button class="btn ghost bl" data-go="platforms">取消这次改写</button>
+                </div>
+              </div>
+            </section>
+
+            <!-- ---------- 6. OUTPUT ---------- -->
+            <section class="scr" id="scr-output">
+              <div class="navbar"><button class="ibtn" data-go="enter"><svg class="ic"><use href="#i-back"/></svg></button><span class="nb-t">改写结果</span><span class="nb-step">4 个版本</span></div>
+              <div class="sc">
+                <div class="kpi-row" data-anim style="--i:0">
+                  <div class="kpi"><span class="kpi-n" data-count="4">0</span><span class="kpi-l">版本</span></div>
+                  <div class="kpi"><span class="kpi-n" data-count="16">0</span><span class="kpi-l">处差异</span></div>
+                  <div class="kpi"><span class="kpi-n" data-count="9">0</span><span class="kpi-l">项合规</span></div>
+                  <div class="kpi warn"><span class="kpi-n" data-count="1">0</span><span class="kpi-l">待你确认</span></div>
+                </div>
+
+                <div class="grid2">
+                  <div class="pcard" data-anim style="--i:1;--pc:#25F4EE" data-go="refine">
+                    <div class="vframe sq"><div class="vscene s1"><i class="obj"></i><i class="glow"></i><i class="grain"></i></div>
+                      <div class="vui cap">POR QUE NINGUÉM<br>TE CONTOU ISSO?</div>
+                      <div class="vui cta">Ver produto</div>
+                      <span class="v-badge ok"><svg class="ic"><use href="#i-check"/></svg>可直接发</span>
+                    </div>
+                    <div class="pc-b"><b>TikTok</b><i class="pdot"></i></div>
+                    <div class="pc-d">钩子换提问式 · 字幕中置 · 挂车左移 · 换商用 phonk</div>
+                  </div>
+
+                  <div class="pcard" data-anim style="--i:2;--pc:#E1306C" data-go="refine">
+                    <div class="vframe sq"><div class="vscene s2"><i class="obj"></i><i class="glow"></i><i class="grain"></i></div>
+                      <div class="vui cap">TRÊS CORES,<br>UM PREÇO SÓ</div>
+                      <span class="v-badge em"><svg class="ic"><use href="#i-alert"/></svg>音乐待确认</span>
+                    </div>
+                    <div class="pc-b"><b>Reels</b><i class="pdot"></i></div>
+                    <div class="pc-d">顶部留白 8% · 封面产品特写 · 标题去 emoji 换俚语</div>
+                  </div>
+
+                  <div class="pcard" data-anim style="--i:3;--pc:#FF4E45" data-go="fix">
+                    <div class="vframe sq"><div class="vscene s3"><i class="obj"></i><i class="glow"></i><i class="grain"></i></div>
+                      <div class="vui cap pad">COMBO 3 PEÇAS<br>POR R$ 19,90</div>
+                      <div class="safe-guide"></div>
+                      <span class="v-badge ok"><svg class="ic"><use href="#i-check"/></svg>可直接发</span>
+                    </div>
+                    <div class="pc-b"><b>Shorts</b><i class="pdot"></i></div>
+                    <div class="pc-d">字幕上移 · 加 3 秒引导订阅 · 封面加标题条</div>
+                  </div>
+
+                  <div class="pcard" data-anim style="--i:4;--pc:#FF8A00" data-go="refine">
+                    <div class="vframe sq"><div class="vscene s4"><i class="obj"></i><i class="glow"></i><i class="grain"></i></div>
+                      <div class="vui cap big">3 POR 1???</div>
+                      <span class="v-badge ok"><svg class="ic"><use href="#i-check"/></svg>可直接发</span>
+                    </div>
+                    <div class="pc-b"><b>Kwai</b><i class="pdot"></i></div>
+                    <div class="pc-d">前 2 秒重剪 · 封面换人脸 · 音乐换本地 funk</div>
+                  </div>
+                </div>
+
+                <div class="hint-card"><svg class="ic"><use href="#i-spark"/></svg>同一段素材，四版的<b>钩子、字幕位置、音乐、封面</b>都不同 —— 点任一版可以看它为什么被这么改。</div>
+
+                <div class="bottom-bar dual">
+                  <button class="btn ghost bl" data-go="rules">看规则沉淀</button>
+                  <button class="btn pri bl" data-go="export">导出这 4 版<svg class="ic"><use href="#i-next"/></svg></button>
+                </div>
+              </div>
+            </section>
+
+            <!-- ---------- 7. REFINE ---------- -->
+            <section class="scr" id="scr-refine">
+              <div class="navbar"><button class="ibtn" data-go="output"><svg class="ic"><use href="#i-back"/></svg></button><span class="nb-t">TikTok 版本</span><span class="nb-step">微调</span></div>
+              <div class="sc">
+                <div class="big-preview">
+                  <div class="vframe tall"><div class="vscene s1"><i class="obj"></i><i class="glow"></i><i class="grain"></i></div>
+                    <div class="vui top"><span class="ui-tab on">推荐</span><span class="ui-tab">关注</span></div>
+                    <div class="vui right"><i class="ui-av"></i><i class="ui-ic"></i><i class="ui-ic"></i><i class="ui-ic"></i></div>
+                    <div class="vui bot"><span class="ui-h">@lina_joias</span><span class="ui-c">Ver produto</span></div>
+                    <div class="vui cap" id="hookPreview">POR QUE NINGUÉM<br>TE CONTOU ISSO?</div>
+                    <div class="safe-guide"></div>
+                    <span class="v-play"><svg class="ic"><use href="#i-play"/></svg></span>
+                  </div>
+                </div>
+
+                <button class="why-btn" id="openSheet"><svg class="ic"><use href="#i-book"/></svg>这一版为什么这样改？<span class="why-x">4 条规则<svg class="ic"><use href="#i-next"/></svg></span></button>
+
+                <div class="segs">
+                  <button class="seg on">钩子</button><button class="seg">字幕</button><button class="seg">封面</button><button class="seg">音乐</button>
+                </div>
+
+                <div class="hook-list">
+                  <div class="hook on" data-hook="POR QUE NINGUÉM<br>TE CONTOU ISSO?">
+                    <div class="hk-i"><span class="hk-r"></span></div>
+                    <div class="hk-t"><b>Por que ninguém te contou isso?</b><span>提问式 · 制造信息缺口</span></div>
+                    <span class="hk-m ok">+12% 预计完播</span>
+                  </div>
+                  <div class="hook" data-hook="EU PAGUEI R$ 19,90<br>E ME ARREPENDI">
+                    <div class="hk-i"><span class="hk-r"></span></div>
+                    <div class="hk-t"><b>Eu paguei R$ 19,90 e me arrependi</b><span>反向陈述 · 冲突感强</span></div>
+                    <span class="hk-m">+7%</span>
+                  </div>
+                  <div class="hook" data-hook="3 CORES POR<br>MENOS DE R$ 20">
+                    <div class="hk-i"><span class="hk-r"></span></div>
+                    <div class="hk-t"><b>3 cores por menos de R$ 20</b><span>直给卖点 · 转化稳、留人弱</span></div>
+                    <span class="hk-m">+2%</span>
+                  </div>
+                </div>
+
+                <div class="bottom-bar dual">
+                  <button class="btn ghost bl" data-go="output">先看看别的版</button>
+                  <button class="btn pri bl" id="applyHook">应用并重新合成<svg class="ic"><use href="#i-check"/></svg></button>
+                </div>
+              </div>
+            </section>
+
+            <!-- ---------- 8. FAIL ---------- -->
+            <section class="scr" id="scr-fail">
+              <div class="navbar"><button class="ibtn" data-go="platforms"><svg class="ic"><use href="#i-back"/></svg></button><span class="nb-t">正在改写</span><span class="nb-step">4 / 4</span></div>
+              <div class="sc">
+                <div class="fail-art"><svg class="ic"><use href="#i-alert"/></svg></div>
+                <h3 class="h3 center">第 2 步卡住了</h3>
+                <p class="sub center">钩子文案服务超时（12 秒无响应）。<br><b>其余 3 步没有开始，不扣改写次数。</b></p>
+
+                <div class="card" data-anim style="--i:0">
+                  <div class="kv"><span>失败步骤</span><b>生成钩子文案</b></div>
+                  <div class="kv"><span>已完成的</span><b>解析源片（抽出 6 个片段）</b></div>
+                  <div class="kv"><span>可能原因</span><b>上游模型排队，非素材问题</b></div>
+                  <div class="kv"><span>你的次数</span><b>4 次改写，一次没扣</b></div>
+                </div>
+
+                <button class="path" data-go="degraded" data-anim style="--i:1">
+                  <div class="pt-l"><b>用本地模板先出一版</b><span>钩子用规则库里的句式，1 分钟出片</span></div>
+                  <span class="pt-x">推荐<svg class="ic"><use href="#i-next"/></svg></span>
+                </button>
+                <button class="path" data-anim style="--i:2">
+                  <div class="pt-l"><b>等一会儿我自己重试</b><span>任务留在队列里，好了会推给你</span></div>
+                  <span class="pt-x dim">排队中</span>
+                </button>
+                <button class="path" data-anim style="--i:3">
+                  <div class="pt-l"><b>只做版式和字幕，文案我自己写</b><span>跳过 AI，走纯编辑</span></div>
+                  <span class="pt-x dim">手动</span>
+                </button>
+
+                <div class="ghost-note center"><svg class="ic"><use href="#i-clock"/></svg>失败要能归因到具体步骤 —— 用户才知道该等、该换，还是该放弃。</div>
+              </div>
+            </section>
+
+            <!-- ---------- 9. DEGRADED ---------- -->
+            <section class="scr" id="scr-degraded">
+              <div class="navbar"><button class="ibtn" data-go="fail"><svg class="ic"><use href="#i-back"/></svg></button><span class="nb-t">降级结果</span><span class="nb-step">本地模板</span></div>
+              <div class="sc">
+                <div class="degrade-banner">
+                  <svg class="ic"><use href="#i-alert"/></svg>
+                  <div><b>这是「快速版」</b><span>钩子来自你的规则库句式，不是现场生成</span></div>
+                </div>
+
+                <div class="grid2">
+                  <div class="pcard flat"><div class="vframe sq"><div class="vscene s1"><i class="obj"></i><i class="glow"></i><i class="grain"></i></div><div class="vui cap">ESSE COMBO DE 3<br>CUSTA MENOS DE R$20</div><span class="v-badge tmpl">模板句</span></div><div class="pc-b"><b>TikTok</b><i class="pdot" style="--pc:#25F4EE"></i></div><div class="pc-d">版式与字幕已按规则改好</div></div>
+                  <div class="pcard flat"><div class="vframe sq"><div class="vscene s2"><i class="obj"></i><i class="glow"></i><i class="grain"></i></div><div class="vui cap">ESSE COMBO DE 3<br>CUSTA MENOS DE R$20</div><span class="v-badge tmpl">模板句</span></div><div class="pc-b"><b>Reels</b><i class="pdot" style="--pc:#E1306C"></i></div><div class="pc-d">版式与字幕已按规则改好</div></div>
+                </div>
+
+                <div class="queue-row">
+                  <span class="q-spin"></span>
+                  <div><b>AI 精剪还在排队</b><span>排到你时会用同一批素材重跑，结果直接覆盖这里</span></div>
+                  <span class="tag">队列 #3</span>
+                </div>
+
+                <div class="bottom-bar dual">
+                  <button class="btn ghost bl" data-go="export">先用这些去发</button>
+                  <button class="btn pri bl" data-go="output">查看全部<svg class="ic"><use href="#i-next"/></svg></button>
+                </div>
+              </div>
+            </section>
+
+            <!-- ---------- 10. FIX ---------- -->
+            <section class="scr" id="scr-fix">
+              <div class="navbar"><button class="ibtn" data-go="output"><svg class="ic"><use href="#i-back"/></svg></button><span class="nb-t">Shorts 版本</span><span class="nb-step">结果不理想</span></div>
+              <div class="sc">
+                <div class="big-preview">
+                  <div class="vframe tall fixv" id="fixFrame"><div class="vscene s3"><i class="obj"></i><i class="glow"></i><i class="grain"></i></div>
+                    <div class="vui bot"><span class="ui-h">@lina_joias</span><span class="ui-c">Inscreva-se</span></div>
+                    <div class="vui cap pad unsafe" id="fixCap">COMBO 3 PEÇAS<br>POR R$ 19,90</div>
+                    <div class="safe-guide show"></div>
+                    <div class="unsafe-strip"></div>
+                    <span class="fix-flag">字幕被订阅条压住</span>
+                  </div>
+                </div>
+
+                <h3 class="h3">哪里不对？</h3>
+                <div class="prob-row">
+                  <button class="pb on">字幕被压住</button><button class="pb">封面不好</button><button class="pb">钩子不对</button><button class="pb">音乐像广告</button>
+                </div>
+
+                <div class="fix-list">
+                  <div class="fx on" data-fx="up"><div class="fx-l"><b>把字幕整体上移 6%</b><span>移到 YouTube 订阅条上方的安全区</span></div><span class="fx-x">推荐</span></div>
+                  <div class="fx" data-fx="short"><div class="fx-l"><b>每行少 4 个字</b><span>短句更能撑住 2 秒阅读</span></div><span class="fx-x">备选</span></div>
+                  <div class="fx" data-fx="both"><div class="fx-l"><b>字幕挪到画面中上部</b><span>完全避开下半屏所有平台 UI</span></div><span class="fx-x">激进</span></div>
+                </div>
+
+                <div class="bottom-bar dual">
+                  <button class="btn ghost bl" data-go="output">算了，我自己改</button>
+                  <button class="btn pri bl" id="applyFix">应用这条修正<svg class="ic"><use href="#i-check"/></svg></button>
+                </div>
+              </div>
+            </section>
+
+            <!-- ---------- 11. EXPORT ---------- -->
+            <section class="scr" id="scr-export">
+              <div class="navbar"><button class="ibtn" data-go="output"><svg class="ic"><use href="#i-back"/></svg></button><span class="nb-t">导出与排期</span><span class="nb-step">最后一步</span></div>
+              <div class="sc">
+                <h3 class="h3" data-anim style="--i:0">什么时候发，比发不发更重要</h3>
+                <p class="sub" data-anim style="--i:1">按你过去 30 天的数据，这是每个货架的上班时间。</p>
+
+                <div class="exp-list">
+                  <div class="ex" data-anim style="--i:2;--pc:#25F4EE"><i class="pdot"></i><div class="ex-t"><b>TikTok</b><span>周四 19:40 · 同城高峰</span></div><label class="sw on"><i></i></label></div>
+                  <div class="ex" data-anim style="--i:3;--pc:#E1306C"><i class="pdot"></i><div class="ex-t"><b>Reels</b><span>周四 12:20 · 午休刷得最多</span></div><label class="sw on"><i></i></label></div>
+                  <div class="ex" data-anim style="--i:4;--pc:#FF4E45"><i class="pdot"></i><div class="ex-t"><b>Shorts</b><span>周五 21:10 · 长尾最好</span></div><label class="sw on"><i></i></label></div>
+                  <div class="ex" data-anim style="--i:5;--pc:#FF8A00"><i class="pdot"></i><div class="ex-t"><b>Kwai</b><span>周六 20:00 · 周末流量翻倍</span></div><label class="sw"><i></i></label></div>
+                </div>
+
+                <div class="card" data-anim style="--i:6">
+                  <div class="kv"><span>导出规格</span><b>1080×1920 · H.264 · 带烧录字幕</b></div>
+                  <div class="kv"><span>字幕文件</span><b>额外给一份 SRT（葡语 / 英语）</b></div>
+                  <div class="kv"><span>封面</span><b>每版 1 张 JPG</b></div>
+                </div>
+
+                <div class="share-row"><svg class="ic"><use href="#i-link"/></svg>生成审阅链接给合伙人（不用他装 App）</div>
+
+                <div class="bottom-bar dual">
+                  <button class="btn ghost bl" data-go="rules">等等再看规则</button>
+                  <button class="btn pri bl" id="doExport">全部导出<svg class="ic"><use href="#i-down"/></svg></button>
+                </div>
+              </div>
+            </section>
+
+            <!-- ---------- 12. RULES ---------- -->
+            <section class="scr" id="scr-rules">
+              <div class="navbar"><button class="ibtn" data-go="export"><svg class="ic"><use href="#i-back"/></svg></button><span class="nb-t">我的货架手册</span><span class="nb-step">8 条规则</span></div>
+              <div class="sc">
+                <h3 class="h3" data-anim style="--i:0">这次改写沉淀下来的东西</h3>
+                <p class="sub" data-anim style="--i:1">规则会累积。下次不用重新被告知一遍。</p>
+
+                <div class="rule new" data-anim style="--i:2">
+                  <div class="rl-h"><span class="rl-tag">新增</span><b>Shorts 字幕要上移 6%</b></div>
+                  <div class="rl-b">来自你 3 次反馈 · 置信度 82%</div>
+                  <div class="rl-meta"><span>生效范围：所有 Shorts 版本</span><label class="sw on sm"><i></i></label></div>
+                </div>
+                <div class="rule" data-anim style="--i:3">
+                  <div class="rl-h"><b>Kwai 前 2 秒必须是人脸</b></div>
+                  <div class="rl-b">来自 42 条历史数据 · 完播差 2.4 倍</div>
+                  <div class="rl-meta"><span>生效范围：Kwai 版本</span><label class="sw on sm"><i></i></label></div>
+                </div>
+                <div class="rule" data-anim style="--i:4">
+                  <div class="rl-h"><b>Reels 巴西曲库有限，先在本地查一遍</b></div>
+                  <div class="rl-b">平台文档 + 你 2 次静音事故</div>
+                  <div class="rl-meta"><span>生效范围：Reels 版本</span><label class="sw on sm"><i></i></label></div>
+                </div>
+                <div class="rule" data-anim style="--i:5">
+                  <div class="rl-h"><b>葡语标题一律去掉 emoji</b></div>
+                  <div class="rl-b">本地化手册 · CTR −18% when used</div>
+                  <div class="rl-meta"><span>生效范围：所有葡语版本</span><label class="sw on sm"><i></i></label></div>
+                </div>
+
+                <div class="hint-card"><svg class="ic"><use href="#i-book"/></svg>手册可以导出给团队，也可以整个关掉 —— <b>它是产品里唯一会随着使用变强的东西。</b></div>
+
+                <div class="bottom-bar">
+                  <button class="btn pri bl" data-go="review">看 48 小时后的数据<svg class="ic"><use href="#i-next"/></svg></button>
+                </div>
+              </div>
+            </section>
+
+            <!-- ---------- 13. REVIEW ---------- -->
+            <section class="scr" id="scr-review">
+              <div class="navbar"><button class="ibtn" data-go="rules"><svg class="ic"><use href="#i-back"/></svg></button><span class="nb-t">数据回流</span><span class="nb-step">发布 48h</span></div>
+              <div class="sc">
+                <h3 class="h3" data-anim style="--i:0">同一条素材，四个货架给出的回报</h3>
+
+                <div class="bars" data-anim style="--i:1">
+                  <div class="bar-row"><span class="br-n">TikTok</span><div class="br-t"><i style="--w:74%;--pc:#25F4EE"></i></div><span class="br-v">74%</span></div>
+                  <div class="bar-row"><span class="br-n">Reels</span><div class="br-t"><i style="--w:58%;--pc:#E1306C"></i></div><span class="br-v">58%</span></div>
+                  <div class="bar-row"><span class="br-n">Shorts</span><div class="br-t"><i style="--w:41%;--pc:#FF4E45"></i></div><span class="br-v">41%</span></div>
+                  <div class="bar-row"><span class="br-n">Kwai</span><div class="br-t"><i style="--w:66%;--pc:#FF8A00"></i></div><span class="br-v">66%</span></div>
+                  <div class="bar-cap">横轴：3 秒完播率</div>
+                </div>
+
+                <div class="card win" data-anim style="--i:2">
+                  <div class="card-h"><svg class="ic"><use href="#i-spark"/></svg>赢的那一版做对了什么</div>
+                  <div class="win-t">“Por que ninguém te contou isso?”</div>
+                  <div class="win-s">提问式钩子 · 在 TikTok 上比原来那条高 31% 完播</div>
+                  <button class="btn pri sm mt8" id="pinHook">设为葡语默认钩子句式</button>
+                </div>
+
+                <div class="hint-card"><svg class="ic"><use href="#i-refresh"/></svg>下一站：把这套流程跑成 <b>每周固定的「一次拍摄 → 四平台发布」</b>。</div>
+
+                <div class="bottom-bar dual">
+                  <button class="btn ghost bl" data-go="enter">回到开头</button>
+                  <button class="btn pri bl" data-go="import">再改写一条<svg class="ic"><use href="#i-next"/></svg></button>
+                </div>
+              </div>
+            </section>
+
+          </div>
+          <div class="homebar"><i></i></div>
+          <div class="sheet-veil" id="veil"></div>
+          <div class="sheet" id="sheet">
+            <div class="sh-grip"></div>
+            <div class="sh-h"><b>为什么 TikTok 版要这样改</b><button class="ibtn sm" id="closeSheet"><svg class="ic"><use href="#i-close"/></svg></button></div>
+            <div class="sh-body">
+              <div class="sh-r"><span class="sh-n">01</span><div><b>钩子改成提问式</b><p>TikTok 的推荐只看前 3 秒留存。你原片开头是特写画面，没有信息缺口。</p><span class="sh-src">平台文档 · 你的历史数据 3s 留存 +12%</span></div></div>
+              <div class="sh-r"><span class="sh-n">02</span><div><b>字幕从贴底改成中置偏下</b><p>贴底字幕会被右下角的挂车按钮和右侧操作栏压住。</p><span class="sh-src">平台 UI 规范 · 安全区测算</span></div></div>
+              <div class="sh-r"><span class="sh-n">03</span><div><b>音乐换成商用授权 phonk</b><p>原曲不在商业曲库，发布后可能被静音，等于白发。</p><span class="sh-src">版权比对结果</span></div></div>
+              <div class="sh-r"><span class="sh-n">04</span><div><b>标题去掉 emoji，换成葡语俚语</b><p>本地用户把 emoji 标题识别为搬运/广告内容。</p><span class="sh-src">你的规则手册 · 已生效 2 周</span></div></div>
+            </div>
+            <button class="btn pri bl" id="sheetOk">知道了</button>
+          </div>
+          <div class="toast" id="toast"><span id="toastT"></span></div>
+        </div>
+      </div>
+      <div class="p-cap">Reframe · 可点击原型 · 手机样式仅用于演示</div>
+    </div>
+  </main>
+</div>
+
+<!-- ================= CONSOLE ================= -->
+<div class="console">
+  <div class="c-left">
+    <span class="c-lab">跳转</span>
+    <div class="c-chips" id="chips"></div>
+  </div>
+  <div class="c-right">
+    <label class="csw" id="failSw"><i></i><span>模拟 AI 超时</span></label>
+    <button class="cbtn" id="btnAuto"><svg class="ic"><use href="#i-play"/></svg>自动演示</button>
+    <button class="cbtn" id="btnReset"><svg class="ic"><use href="#i-refresh"/></svg>重置</button>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>Reframe · 产品需求文档 (PRD)</title>
+<style>
+  @page{size:A4;margin:0}
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:#fff}
+  body{font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Segoe UI",sans-serif;color:#1A1C23;font-size:9.2pt;line-height:1.68}
+  .page{width:210mm;height:296.5mm;page-break-after:always;padding:16mm 16mm 14mm;position:relative;overflow:hidden;background:#fff}
+  .page:last-child{page-break-after:auto}
+
+  /* —— 版头版脚 —— */
+  .ph{position:absolute;top:8mm;left:16mm;right:16mm;display:flex;justify-content:space-between;align-items:center;
+    font-size:7.5pt;color:#8A8F9C;letter-spacing:1.2px}
+  .ph b{color:#B8860B;font-weight:700;letter-spacing:2px}
+  .pf{position:absolute;bottom:7mm;left:16mm;right:16mm;display:flex;justify-content:space-between;
+    font-size:7.5pt;color:#9AA0AC;border-top:1px solid #EDEEF1;padding-top:2.2mm}
+
+  /* —— 字体层级 —— */
+  .kicker{font-size:8pt;font-weight:700;letter-spacing:2.4px;color:#B8860B;margin-bottom:2.4mm}
+  h1{font-size:23pt;line-height:1.22;letter-spacing:-.5px;margin:0 0 3mm;font-weight:700}
+  h2{font-size:14.5pt;letter-spacing:-.3px;margin:0;font-weight:700}
+  h3{font-size:10.4pt;margin:0 0 1.8mm;font-weight:650}
+  h4{font-size:9.4pt;margin:0 0 1.2mm;font-weight:650;color:#2A2D35}
+  p{margin:0 0 2.4mm;color:#33363E}
+  .lede{font-size:10.2pt;line-height:1.78;color:#2A2D35}
+  .small{font-size:8.3pt;color:#5A5F6A}
+  .dim{color:#8A8F9C}
+  .src{font-size:7.6pt;color:#9AA0AC}
+
+  /* —— 章节 —— */
+  .sec{margin-bottom:5.6mm}
+  .sec:last-child{margin-bottom:0}
+  .sec-t{display:flex;align-items:baseline;gap:2.4mm;margin-bottom:2.6mm}
+  .sec-n{font-size:8pt;font-weight:800;color:#B8860B;letter-spacing:1px}
+  .rule{height:1px;background:linear-gradient(90deg,#E8B530,rgba(232,181,48,0));margin-bottom:3.4mm}
+  .sub{margin:3.4mm 0 2mm}
+  .sub .sn{font-size:8pt;font-weight:800;color:#B8860B;letter-spacing:.6px;margin-right:1.6mm}
+
+  /* —— 组件 —— */
+  .onebox{background:#0E0F14;color:#F3F5F9;border-radius:4mm;padding:5.6mm 6.6mm;margin:3.6mm 0}
+  .onebox .kicker{color:#FFCE5C;margin-bottom:1.8mm}
+  .onebox .ot{font-size:12.8pt;font-weight:700;line-height:1.5;letter-spacing:-.2px}
+  .onebox .os{font-size:8.6pt;color:rgba(243,245,249,.62);margin-top:1.8mm;line-height:1.66}
+
+  .qbox{border-left:2.5px solid #E8B530;background:#FBF7EC;padding:2.4mm 3.8mm;margin:2.4mm 0;border-radius:0 2mm 2mm 0;font-size:9pt;color:#4A3E1A}
+
+  .tbl{width:100%;border-collapse:collapse;font-size:8.6pt}
+  .tbl th{text-align:left;font-size:7.9pt;color:#8A8F9C;font-weight:600;letter-spacing:.4px;padding:1.6mm 2.3mm;border-bottom:1.5px solid #2A2D35}
+  .tbl td{padding:1.8mm 2.3mm;border-bottom:1px solid #EDEEF1;vertical-align:top;color:#33363E;line-height:1.58}
+  .tbl tr:last-child td{border-bottom:0}
+  .tbl b{font-weight:650;color:#1A1C23}
+  .tbl .hl{background:#FBF7EC}
+  .tbl.dense th{padding:1.3mm 2mm}
+  .tbl.dense td{padding:1.4mm 2mm;font-size:8.3pt;line-height:1.52}
+  .tbl .c{text-align:center}
+  .tbl .ok{color:#0F7B3D;font-weight:700}
+  .tbl .no{color:#B42318}
+
+  ul.tick{margin:0;padding:0;list-style:none}
+  ul.tick li{position:relative;padding-left:4.4mm;margin-bottom:1.5mm;color:#33363E;font-size:9pt;line-height:1.62}
+  ul.tick li::before{content:'';position:absolute;left:0;top:2.4mm;width:1.8mm;height:1.8mm;border-radius:50%;background:#E8B530}
+  ul.tick li b{font-weight:650}
+  ul.tick.tight li{margin-bottom:1mm;font-size:8.6pt;line-height:1.55}
+
+  .cols{display:flex;gap:5.6mm}
+  .cols>div{flex:1;min-width:0}
+
+  /* 指标卡 */
+  .kvgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:2.8mm;margin:2.6mm 0}
+  .kv{background:#F7F8FA;border:1px solid #E7E9EE;border-radius:2.6mm;padding:2.6mm 3mm}
+  .kv b{font-size:12.6pt;font-weight:750;display:block;letter-spacing:-.3px}
+  .kv span{font-size:7.6pt;color:#6A707C;line-height:1.4;display:block;margin-top:.8mm}
+
+  /* 状态标签 */
+  .tag{display:inline-block;font-size:7.2pt;font-weight:650;padding:.5mm 2mm;border-radius:99px;letter-spacing:.3px}
+  .tag.g{background:#E7F6EC;color:#0F7B3D}
+  .tag.a{background:#FBF3E0;color:#A05E03}
+  .tag.r{background:#FDECEC;color:#B42318}
+  .tag.b{background:#EEF2FB;color:#2F5BC7}
+  .tag.n{background:#F1F2F5;color:#5A5F6A}
+
+  /* 图示容器 */
+  .fig{border:1px solid #E7E9EE;border-radius:3mm;background:#FCFCFD;padding:3mm 3mm 2mm;margin:2.4mm 0}
+  .fig .cap{font-size:7.8pt;color:#8A8F9C;text-align:center;margin-top:1.6mm}
+  .fig svg{display:block;width:100%;height:auto}
+
+  /* 用户故事 */
+  .story{font-size:8.8pt;color:#3D4148;background:#F7F8FA;border:1px dashed #D8DBE2;border-radius:2.4mm;padding:2.2mm 3.2mm;margin:1.8mm 0;font-style:italic}
+
+  /* GWT 验收 */
+  .gwt{font-size:8.2pt;border:1px solid #E7E9EE;border-radius:2.4mm;overflow:hidden;margin:1.8mm 0}
+  .gwt .r{display:flex;border-bottom:1px solid #EFF0F4}
+  .gwt .r:last-child{border-bottom:0}
+  .gwt .k{flex:none;width:11mm;font-weight:750;font-size:7.4pt;letter-spacing:.4px;padding:1.6mm 0 1.6mm 2.6mm;color:#B8860B}
+  .gwt .v{flex:1;padding:1.6mm 2.6mm 1.6mm 0;color:#33363E;line-height:1.5}
+  .gwt .r.g .k{color:#0F7B3D}
+  .gwt .r.w .k{color:#2F5BC7}
+  .gwt .r.t .k{color:#B42318}
+
+  /* 截图 */
+  .shots{display:grid;grid-template-columns:repeat(4,1fr);gap:3.2mm}
+  .shot img{width:100%;border-radius:2.4mm;border:1px solid #E2E4EA;display:block}
+  .shot .sl{font-size:7.5pt;color:#5A5F6A;text-align:center;margin-top:1.2mm;line-height:1.42}
+
+  /* 封面 */
+  .cover{background:#0E0F14;color:#F3F5F9;display:flex;flex-direction:column}
+  .cover .ck{font-size:8.4pt;letter-spacing:3px;color:#FFCE5C;font-weight:700}
+  .cover h1{color:#fff;font-size:34pt;margin:2mm 0 2mm}
+  .cover .csub{font-size:13pt;color:rgba(243,245,249,.66);font-weight:400}
+  .cover .cdesc{font-size:9.6pt;color:rgba(243,245,249,.55);line-height:1.8;max-width:150mm}
+  .cover .cmeta{margin-top:auto;display:grid;grid-template-columns:repeat(4,1fr);gap:4mm;border-top:1px solid rgba(255,255,255,.14);padding-top:5mm}
+  .cover .cmeta .k{font-size:7.4pt;letter-spacing:1.6px;color:rgba(243,245,249,.45);margin-bottom:1.2mm}
+  .cover .cmeta .v{font-size:9.6pt;font-weight:650}
+  .cover .cglow{position:absolute;width:150mm;height:150mm;border-radius:50%;right:-50mm;top:-50mm;
+    background:radial-gradient(circle,rgba(255,183,3,.16),transparent 62%)}
+  .cover .cchip{display:inline-block;border:1px solid rgba(255,206,92,.4);color:#FFCE5C;border-radius:99px;
+    font-size:8pt;padding:1mm 3.4mm;letter-spacing:1px;margin-bottom:5mm}
+
+  .mono{font-family:"SF Mono","Cascadia Code",Consolas,monospace;font-size:8pt;background:#F4F5F8;border:1px solid #E7E9EE;border-radius:2.6mm;padding:3mm 3.6mm;line-height:1.7;white-space:pre-wrap;color:#3D4148}
+</style>
+</head>
+<body>
+
+<!-- ================= P1 封面 ================= -->
+<div class="page cover">
+  <div class="cglow"></div>
+  <div style="height:26mm"></div>
+  <div class="cchip">PRODUCT REQUIREMENTS DOCUMENT</div>
+  <div class="ck">REFRAME · AI 视频再版引擎</div>
+  <h1>Reframe<br><span class="csub">一条视频，四个货架 —— 产品需求文档</span></h1>
+  <p class="cdesc">面向新兴市场内容电商卖家与内容团队的 AI 视频再版（Reframing）产品：将一条已拍摄完成的源视频，依据各分发平台的规则与语境，自动改写成 TikTok / Instagram Reels / YouTube Shorts / Kwai 四个可直接发布的版本，并将每次改写沉淀为可复用的平台规则资产。</p>
+  <div class="cmeta">
+    <div><div class="k">文档版本</div><div class="v">V0.9（原型验证版）</div></div>
+    <div><div class="k">文档状态</div><div class="v">评审中 · Draft</div></div>
+    <div><div class="k">更新日期</div><div class="v">2026-10-29</div></div>
+    <div><div class="k">密级</div><div class="v">内部 · Internal</div></div>
+  </div>
+</div>
+
+<!-- ================= P2 一、文档基础信息 ================= -->
+<div class="page">
+  <div class="ph"><b>REFRAME</b><span>产品需求文档 · 一、文档基础信息</span></div>
+  <div style="height:5mm"></div>
+
+  <div class="sec">
+    <div class="sec-t"><span class="sec-n">01</span><h2>文档基础信息</h2></div>
+    <div class="rule"></div>
+
+    <div class="sub"><span class="sn">1.1</span><b>文档变更记录</b></div>
+    <table class="tbl">
+      <tr><th style="width:14mm">版本</th><th style="width:22mm">日期</th><th style="width:26mm">修改人</th><th>修改说明</th><th style="width:22mm">审批人</th></tr>
+      <tr><td>V0.1</td><td>2026-09-14</td><td>产品负责人</td><td>市场调研结论版：赛道判断、目标市场选择、竞品扫描</td><td>业务负责人</td></tr>
+      <tr><td>V0.5</td><td>2026-10-08</td><td>产品负责人</td><td>概念原型版：MVP 范围、13 屏可点击原型、规则引擎分层方案</td><td>业务负责人</td></tr>
+      <tr class="hl"><td><b>V0.9</b></td><td><b>2026-10-29</b></td><td><b>产品负责人</b></td><td><b>原型验证版：补齐状态机、RBAC、NFR、埋点与风险清单，提交研发评审</b></td><td>待评审</td></tr>
+    </table>
+
+    <div class="sub"><span class="sn">1.2</span><b>干系人与职责</b></div>
+    <table class="tbl dense">
+      <tr><th style="width:34mm">角色</th><th style="width:30mm">职责范围</th><th>在本文档中的责任</th></tr>
+      <tr><td><b>产品负责人</b></td><td>需求与范围</td><td>本文档撰写与维护；MVP 边界与验收标准的最终解释人</td></tr>
+      <tr><td><b>研发负责人</b></td><td>架构与交付</td><td>评估第八章技术假设；对第六章集成依赖给出实现排期</td></tr>
+      <tr><td><b>测试负责人</b></td><td>质量</td><td>依据第五章验收标准（Given/When/Then）拆解测试用例</td></tr>
+      <tr><td><b>设计负责人</b></td><td>交互与视觉</td><td>维护原型（附录 A），确保与第五章交互逻辑一致</td></tr>
+      <tr><td><b>法务合规</b></td><td>合规审查</td><td>审定 2.5 节：LGPD/GDPR、音乐版权、平台条款遵循方案</td></tr>
+      <tr><td><b>安全负责人</b></td><td>安全与审计</td><td>审定 7.3 节：认证、加密、审计日志方案</td></tr>
+    </table>
+
+    <div class="sub"><span class="sn">1.3</span><b>参考资料</b></div>
+    <ul class="tick tight">
+      <li>市场调研：Goldman Sachs Research《Creator Economy》2025；Momentum Works / Tabcut 拉美电商数据（经 O Globo 2026-10 报道）；DataReportal Brazil Digital Report 2025；Abiacom 巴西电商年报 2026-02</li>
+      <li>平台规范：Meta Reels 广告安全区指南；TikTok Creator Rewards 计划文档；YouTube Shorts 帮助中心；Kwai for Business 投放规范</li>
+      <li>译制定价基准：Translated《Video Translation Price Guide 2026》；行业配音/字幕每分钟费率公开报价</li>
+      <li>关联文档：BRD《Reframe 商业论证 V0.3》；竞品扫描备忘录；13 屏可点击原型（附录 A）</li>
+    </ul>
+
+    <div class="sub"><span class="sn">1.4</span><b>术语表</b></div>
+    <table class="tbl dense">
+      <tr><th style="width:26mm">术语</th><th>定义</th></tr>
+      <tr><td><b>再版 / Reframe</b></td><td>不生成新画面，仅将已有视频按目标平台的规则与语境重新包装（钩子、字幕、音乐、封面、规格）的过程</td></tr>
+      <tr><td><b>货架</b></td><td>本文档对分发平台的称呼：TikTok、Reels、Shorts、Kwai 四个流量货架</td></tr>
+      <tr><td><b>规则引擎</b></td><td>存储并执行各平台改写规则的服务，分「官方层」（平台公开规范）与「用户层」（用户验证沉淀的私有规则）</td></tr>
+      <tr><td><b>货架手册</b></td><td>用户层规则的可见集合，可编辑、可分享、可导出，是产品的核心资产</td></tr>
+      <tr><td><b>安全区</b></td><td>平台 UI（按钮、字幕条、订阅条）不遮挡的画面区域；跨平台交集约 720×960px（1080×1920 画布）</td></tr>
+      <tr><td><b>钩子 / Hook</b></td><td>视频前 3 秒用于阻止滑走的画面或文案</td></tr>
+      <tr><td><b>降级出片</b></td><td>AI 流水线失败时，由本地规则模板生成可用但未经 AI 优化的保底版本</td></tr>
+      <tr><td><b>Content ID</b></td><td>YouTube 的版权音频指纹系统；未授权音乐会触发声明并影响收益</td></tr>
+      <tr><td><b>RTL</b></td><td>Right-to-Left，阿拉伯语等从右向左书写系统的排版方向</td></tr>
+    </table>
+  </div>
+  <div class="pf"><span>Reframe · 产品需求文档 V0.9</span><span>2</span></div>
+</div>
+
+<!-- ================= P3 二、业务背景（市场数据） ================= -->
+<div class="page">
+  <div class="ph"><b>REFRAME</b><span>二、业务背景与战略定位</span></div>
+  <div style="height:5mm"></div>
+
+  <div class="sec">
+    <div class="sec-t"><span class="sec-n">02</span><h2>业务背景与战略定位</h2></div>
+    <div class="rule"></div>
+
+    <div class="sub"><span class="sn">2.1</span><b>业务痛点与机会</b></div>
+    <p>短视频电商正在从单一平台经营转向多平台经营，但内容生产的工具链没有跟上。创作者经济整体规模 2025 年约 <b>2,500 亿美元</b>，预计 2027 年接近翻倍至 <b>4,800 亿美元</b>（Goldman Sachs）；其中 84% 的创作者已在日常使用 AI 工具，但工具供给集中在「从零生成画面」，而不是「让已有内容跨平台生效」。</p>
+
+    <div class="kvgrid">
+      <div class="kv"><b>US$653亿</b><span>TikTok Shop 2025 全球 GMV，上年为 75.5 亿美元</span></div>
+      <div class="kv"><b>11.02万家</b><span>TikTok Shop 巴西活跃店铺（2026 上半年），仅 3% 年 GMV 破百万雷亚尔</span></div>
+      <div class="kv"><b>6,000万+</b><span>Kwai 巴西月活；超 50% 订单直接源自短视频与直播</span></div>
+      <div class="kv"><b>US$40–100</b><span>专业视频本地化每分钟报价（全包译制更高），工作室最低消费 $500–2,000</span></div>
+    </div>
+    <p class="src">来源：TikTok Shop 全站点年报（2025）；Momentum Works / Tabcut（经 O Globo 2026-10）；快手国际化业务公开数据（2025-07）；Translated《Video Translation Price Guide 2026》。</p>
+
+    <p>痛点集中在三层：<b>① 多平台分发的边际成本不为零</b>——四个平台的安全区、音乐版权、字幕习惯、封面逻辑各不相同，手动改四个版本约需 40 分钟，热点生命周期却只有 4–5 小时；<b>② 平台规则不透明且频繁变动</b>——Meta 公布 Reels 安全区为画面上 14% / 下 35% / 两侧 6%，TikTok 与 Shorts 只给模板不给数字，且 YouTube 的 Content ID 会对未授权音乐直接声明；<b>③ 经验无法沉淀</b>——卖家在一次次失败中积累的平台知识，散落在社群与聊天记录里，没有任何工具将其变成可复用资产。不解决意味着：每条少发一个平台的视频，都是一次直接损失的出单机会。</p>
+  </div>
+
+  <div class="sec">
+    <div class="sub"><span class="sn">2.2</span><b>产品愿景与目标</b></div>
+    <div class="onebox">
+      <div class="kicker">产品定位（一句话）</div>
+      <div class="ot">把同一份内容资产，翻译成不同平台语境下能拿到流量的样子。</div>
+      <div class="os">Reframe 是「再版」工具，不是生成工具：画面来自用户实拍，AI 负责钩子改写、字幕重排、版权音乐替换、封面重制与平台规格适配。</div>
+    </div>
+    <table class="tbl">
+      <tr><th style="width:40mm">目标（原型验证期 90 天）</th><th>指标口径</th></tr>
+      <tr><td><b>北极星指标：每周完成「四平台全发」的视频数</b></td><td>同一源视频在四平台均完成导出的任务计数</td></tr>
+      <tr><td>改写流水线成功率 ≥ 92%</td><td>进入「改写中」且最终产出四版的任务占比</td></tr>
+      <tr><td>降级兜底可用率 100%</td><td>AI 失败任务均能给出本地模板版，不出现死路</td></tr>
+      <tr><td>免费转付费 ≥ 4%</td><td>90 天内订阅转化率（目标市场定价见 3.3）</td></tr>
+    </table>
+  </div>
+  <div class="pf"><span>Reframe · 产品需求文档 V0.9</span><span>3</span></div>
+</div>
+
+<!-- ================= P4 2.3 用户画像 + 2.4 价值主张 ================= -->
+<div class="page">
+  <div class="ph"><b>REFRAME</b><span>二、业务背景与战略定位（续）</span></div>
+  <div style="height:5mm"></div>
+
+  <div class="sec">
+    <div class="sub"><span class="sn">2.3</span><b>目标用户画像（多角色）</b></div>
+    <table class="tbl">
+      <tr><th style="width:26mm">角色</th><th>画像与场景</th><th style="width:44mm">权责边界</th></tr>
+      <tr class="hl"><td><b>个体卖家</b>（核心）</td><td><b>Lina，29 岁，圣保罗 TikTok Shop 饰品卖家</b>。一人完成选品、拍摄、打包、客服；月发 8–20 条；热点窗口 4–5 小时，需要「拍完 10 分钟内四平台全发」。巴西市场此类个人账号占达人生态 88.25%（FastMoss 口径）</td><td>创建项目、发起改写、编辑全部版本、导出、管理自己的货架手册</td></tr>
+      <tr><td><b>代理商运营</b>（V1.5）</td><td>跨境 MCN / 代运营公司的内容运营，一人服务 5–10 个卖家账号，需要批量改写与统一审阅标准</td><td>在工作区内批量处理；可编辑共享货架手册；无账单权限</td></tr>
+      <tr><td><b>品牌内容主管</b>（V2.0）</td><td>品牌方电商内容负责人，关心多市场素材的品牌一致性与合规留痕</td><td>审阅与批注（只读 + 评论）；导出审计记录；不直接发起改写</td></tr>
+    </table>
+
+    <div class="qbox">个体卖家是唯一的核心付费决策人；代理商与品牌主管两个角色只影响信息架构与权限设计，不影响 MVP 功能范围。</div>
+  </div>
+
+  <div class="sec">
+    <div class="sub"><span class="sn">2.4</span><b>核心价值主张与竞品对照</b></div>
+    <p>现有 AI 视频工具解决的是「语言翻译」或「画面生成」，没有产品解决「平台语境再版」：</p>
+    <table class="tbl dense">
+      <tr><th style="width:24mm">产品</th><th>核心能力</th><th style="width:24mm" class="c">语言数</th><th style="width:26mm">定价（公开档）</th><th>与 Reframe 的差异</th></tr>
+      <tr><td>HeyGen</td><td>数字人 + 视频翻译（唇形同步）</td><td class="c">175+</td><td>$29/月起</td><td>翻译语言，不处理平台规则；面向讲解类视频</td></tr>
+      <tr><td>Rask AI</td><td>视频配音与字幕翻译</td><td class="c">130+</td><td>$60/月（25 分钟）</td><td>按时长计费，小卖家月成本不可控；无平台语境改写</td></tr>
+      <tr><td>Synthesia</td><td>AI 数字人视频生成</td><td class="c">32+</td><td>$29/月起</td><td>生成路线，不适用「真货实拍」的信任场景</td></tr>
+      <tr><td>CapCut 等剪辑工具</td><td>通用剪辑 + 字幕识别</td><td class="c">—</td><td>免费/低价</td><td>交付工具而非结果；不管平台规则与版权差异</td></tr>
+      <tr><td>批量导出工具</td><td>一键改尺寸分发</td><td class="c">—</td><td>$9–19/月</td><td>只改画布尺寸，不改钩子/语境/音乐版权</td></tr>
+      <tr class="hl"><td><b>Reframe</b></td><td><b>平台语境再版 + 规则资产沉淀</b></td><td class="c"><b>4 平台</b></td><td><b>按改写次数分档</b></td><td><b>把每次改写学到的规则变成用户私有资产</b></td></tr>
+    </table>
+    <p class="small">核心优势排序：① 降本（一次改写替代 40 分钟人工 × 4 平台）；② 增效（热点窗口内完成全平台分发）；③ 数据沉淀（货架手册随使用增值，构成迁移成本）。</p>
+  </div>
+  <div class="pf"><span>Reframe · 产品需求文档 V0.9</span><span>4</span></div>
+</div>
+
+<!-- ================= P5 2.5 合规 + 三、范围 ================= -->
+<div class="page">
+  <div class="ph"><b>REFRAME</b><span>二、合规前置 · 三、产品范围界定</span></div>
+  <div style="height:5mm"></div>
+
+  <div class="sec">
+    <div class="sub"><span class="sn">2.5</span><b>合规与法务前置</b></div>
+    <table class="tbl">
+      <tr><th style="width:30mm">合规域</th><th>要求</th><th style="width:48mm">产品设计响应</th></tr>
+      <tr><td><b>数据隐私</b></td><td>巴西 LGPD、欧盟 GDPR：用户视频与面部/声纹属个人数据</td><td>源视频默认 90 天自动删除；删除请求 72h 内完成；处理目的单独授权</td></tr>
+      <tr><td><b>音乐版权</b></td><td>YouTube Content ID 声明、各平台商用曲库差异（TikTok 商业账号仅可用 Commercial Music Library）</td><td>改写只选用各平台已授权曲库；版权状态在导出前显式标注</td></tr>
+      <tr><td><b>平台条款</b></td><td>竞品水印内容被限流（TikTok 水印在 Reels/Shorts 被抑制）；自动化发布受平台 API 条款约束</td><td>导入时剥离平台水印；MVP 不做自动发布，仅导出文件与排期提醒</td></tr>
+      <tr><td><b>AI 内容标识</b></td><td>各市场陆续要求 AI 加工内容可标识</td><td>导出包内含改写清单（manifest），记录每处 AI 改动供平台申报</td></tr>
+    </table>
+  </div>
+
+  <div class="sec">
+    <div class="sec-t"><span class="sec-n">03</span><h2>产品范围界定</h2></div>
+    <div class="rule"></div>
+
+    <div class="sub"><span class="sn">3.1</span><b>MVP（V1.0）范围：必须验证的核心业务闭环</b></div>
+    <p>导入源视频 → 素材体检 → 选择平台（摊开规则） → AI 改写 → 四版输出 → 单版微调 → 导出/排期 → 规则沉淀。闭环的成功标准是：<b>用户在一次会话内完成从素材到四个可发布版本的全部动作，并至少沉淀一条用户层规则。</b></p>
+
+    <div class="sub"><span class="sn">3.2</span><b>明确不做什么（Out of Scope，V1.0）</b></div>
+    <table class="tbl dense">
+      <tr><th style="width:36mm">不做项</th><th>原因与边界说明</th><th style="width:22mm" class="c">状态</th></tr>
+      <tr><td>AI 生成新画面 / 数字人口播</td><td>与「真货实拍」的信任前提冲突；避免与生成赛道正面竞争</td><td class="c"><span class="tag r">不做</span></td></tr>
+      <tr><td>自动发布与多账号矩阵</td><td>平台 API 门槛与风控成本高；V1.0 只导出与排期提醒</td><td class="c"><span class="tag r">不做</span></td></tr>
+      <tr><td>评论区运营 / 私信自动化</td><td>属于经营链路下游，非再版环节</td><td class="c"><span class="tag r">不做</span></td></tr>
+      <tr><td>接入 Top 4 以外平台</td><td>规则引擎维护成本随平台数线性增长；先打穿质量</td><td class="c"><span class="tag a">V2.0 评估</span></td></tr>
+      <tr><td>多人协作工作区</td><td>个体卖家阶段无协作对象；仅提供审阅链接</td><td class="c"><span class="tag a">V1.5 规划</span></td></tr>
+      <tr><td>桌面端完整功能</td><td>拍摄与发布发生在手机；桌面端仅批量与审阅</td><td class="c"><span class="tag a">V1.5 规划</span></td></tr>
+    </table>
+  </div>
+  <div class="pf"><span>Reframe · 产品需求文档 V0.9</span><span>5</span></div>
+</div>
+
+<!-- ================= P6 3.3 Roadmap + 4.1 泳道图 ================= -->
+<div class="page">
+  <div class="ph"><b>REFRAME</b><span>三、路线图 · 四、业务流程与信息架构</span></div>
+  <div style="height:5mm"></div>
+
+  <div class="sec">
+    <div class="sub"><span class="sn">3.3</span><b>演进路线图</b></div>
+    <table class="tbl dense">
+      <tr><th style="width:20mm">版本</th><th style="width:26mm">里程碑</th><th>范围</th><th style="width:40mm">退出条件（Exit Criteria）</th></tr>
+      <tr class="hl"><td><b>V1.0</b></td><td>MVP 原型验证<br>2026 Q4</td><td>四平台改写闭环、失败降级、货架手册（个人版）、排期导出；巴西葡语单市场</td><td>北极星指标与成功率达标（见 2.2）；50 名种子卖家完成 ≥3 次完整闭环</td></tr>
+      <tr><td><b>V1.5</b></td><td>团队协作<br>2027 Q1</td><td>工作区与席位、代理商批量处理、印尼市场上线、桌面审阅端</td><td>团队席位付费占比 ≥ 15%；第二市场规则包复用率 ≥ 70%</td></tr>
+      <tr><td><b>V2.0</b></td><td>规则资产化<br>2027 Q3</td><td>货架手册分享/导入、48h 数据回流自动化、中东市场（阿语 RTL）、开放 API</td><td>用户层规则平均复用 ≥ 5 次；API 接入代理商 ≥ 10 家</td></tr>
+      <tr><td><b>V3.0</b></td><td>企业级扩展<br>2028</td><td>SSO/SAML、审计日志 SLA、品牌合规审阅流、私有化规则库</td><td>企业合同 ≥ 5 份；安全合规审计通过</td></tr>
+    </table>
+  </div>
+
+  <div class="sec">
+    <div class="sec-t"><span class="sec-n">04</span><h2>核心业务流程与信息架构</h2></div>
+    <div class="rule"></div>
+    <div class="sub"><span class="sn">4.1</span><b>核心业务流程（泳道图）</b></div>
+    <div class="fig">
+      <svg viewBox="0 0 1000 560" xmlns="http://www.w3.org/2000/svg" font-family="PingFang SC, Microsoft YaHei, sans-serif">
+        <!-- 泳道 -->
+        <g font-size="13" font-weight="700" fill="#6A707C">
+          <rect x="0" y="0" width="1000" height="130" fill="#FBF7EC"/>
+          <rect x="0" y="130" width="1000" height="140" fill="#F7F8FA"/>
+          <rect x="0" y="270" width="1000" height="150" fill="#F1F2F5"/>
+          <rect x="0" y="420" width="1000" height="140" fill="#F7F8FA"/>
+          <text x="18" y="24">用户</text>
+          <text x="18" y="154">客户端 App</text>
+          <text x="18" y="294">改写服务</text>
+          <text x="18" y="444">规则引擎</text>
+        </g>
+        <g stroke="#D8DBE2" stroke-width="1">
+          <line x1="0" y1="130" x2="1000" y2="130"/><line x1="0" y1="270" x2="1000" y2="270"/><line x1="0" y1="420" x2="1000" y2="420"/>
+        </g>
+        <defs>
+          <marker id="ah" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#B8860B"/></marker>
+        </defs>
+        <g font-size="12.5" fill="#1A1C23">
+          <!-- 用户 lane -->
+          <g><rect x="30" y="48" width="150" height="46" rx="8" fill="#fff" stroke="#C9CDD6"/><text x="105" y="76" text-anchor="middle">① 导入源视频</text></g>
+          <g><rect x="330" y="48" width="170" height="46" rx="8" fill="#fff" stroke="#C9CDD6"/><text x="415" y="76" text-anchor="middle">④ 确认平台与规则</text></g>
+          <g><rect x="690" y="48" width="150" height="46" rx="8" fill="#fff" stroke="#C9CDD6"/><text x="765" y="76" text-anchor="middle">⑨ 审阅与微调</text></g>
+          <g><rect x="860" y="48" width="120" height="46" rx="8" fill="#0E0F14"/><text x="920" y="76" text-anchor="middle" fill="#FFCE5C">⑩ 导出/排期</text></g>
+          <!-- 客户端 lane -->
+          <g><rect x="80" y="175" width="160" height="46" rx="8" fill="#fff" stroke="#C9CDD6"/><text x="160" y="203" text-anchor="middle">② 上传并请求体检</text></g>
+          <g><rect x="300" y="175" width="200" height="46" rx="8" fill="#fff" stroke="#C9CDD6"/><text x="400" y="196" text-anchor="middle">③ 体检卡 + 各平台</text><text x="400" y="212" text-anchor="middle">规则预览（改动数）</text></g>
+          <g><rect x="540" y="175" width="170" height="46" rx="8" fill="#fff" stroke="#C9CDD6"/><text x="625" y="196" text-anchor="middle">⑥ 进度与日志流</text><text x="625" y="212" text-anchor="middle">（可见的改写过程）</text></g>
+          <g><rect x="750" y="175" width="170" height="46" rx="8" fill="#fff" stroke="#C9CDD6"/><text x="835" y="196" text-anchor="middle">⑧ 四版对比视图</text><text x="835" y="212" text-anchor="middle">差异可追问来源</text></g>
+          <!-- 服务 lane -->
+          <g><rect x="120" y="310" width="190" height="46" rx="8" fill="#fff" stroke="#C9CDD6"/><text x="215" y="332" text-anchor="middle">ASR 转写 + 视觉解析</text><text x="215" y="348" text-anchor="middle">（识别口播与场景）</text></g>
+          <g><rect x="360" y="310" width="180" height="46" rx="8" fill="#fff" stroke="#C9CDD6"/><text x="450" y="332" text-anchor="middle">⑤ 按平台生成改写</text><text x="450" y="348" text-anchor="middle">任务（×4）</text></g>
+          <g><rect x="580" y="310" width="200" height="46" rx="8" fill="#fff" stroke="#C9CDD6"/><text x="680" y="332" text-anchor="middle">⑦ 逐版改写：钩子 / 字幕</text><text x="680" y="348" text-anchor="middle">/ 版权音乐 / 封面 / 规格</text></g>
+          <g><rect x="820" y="310" width="150" height="46" rx="8" fill="#fff" stroke="#C9CDD6"/><text x="895" y="332" text-anchor="middle">质检与打分</text><text x="895" y="348" text-anchor="middle">（安全区/版权）</text></g>
+          <!-- 规则引擎 lane -->
+          <g><rect x="300" y="460" width="240" height="46" rx="8" fill="#0E0F14"/><text x="420" y="482" text-anchor="middle" fill="#FFCE5C">平台规则快照</text><text x="420" y="498" text-anchor="middle" fill="#FFCE5C">（官方层 + 用户层加权）</text></g>
+          <g><rect x="640" y="460" width="250" height="46" rx="8" fill="#fff" stroke="#C9CDD6"/><text x="765" y="482" text-anchor="middle">⑪ 48h 数据回流</text><text x="765" y="498" text-anchor="middle">→ 规则置信度更新</text></g>
+        </g>
+        <!-- 连线 -->
+        <g stroke="#B8860B" stroke-width="1.6" fill="none" marker-end="url(#ah)">
+          <path d="M105,94 L105,140 L160,140 L160,175"/>
+          <path d="M240,198 L300,198"/>
+          <path d="M160,221 L160,310"/>
+          <path d="M310,333 L360,333"/>
+          <path d="M400,175 L400,130 L415,130 L415,94"/>
+          <path d="M420,460 L420,400 L450,400 L450,356"/>
+          <path d="M540,333 L580,333"/>
+          <path d="M680,310 L680,270 L625,270 L625,221"/>
+          <path d="M780,333 L820,333"/>
+          <path d="M895,310 L895,270 L835,270 L835,221"/>
+          <path d="M835,175 L835,130 L765,130 L765,94"/>
+          <path d="M840,76 L860,76"/>
+          <path d="M920,94 L920,440 L890,460"/>
+          <path d="M640,483 L540,483"/>
+        </g>
+      </svg>
+      <div class="cap">图 4-1　「一次再版」端到端泳道：用户 / 客户端 / 改写服务 / 规则引擎</div>
+    </div>
+  </div>
+  <div class="pf"><span>Reframe · 产品需求文档 V0.9</span><span>6</span></div>
+</div>
+
+<!-- ================= P7 4.2 状态机 + 4.3 IA ================= -->
+<div class="page">
+  <div class="ph"><b>REFRAME</b><span>四、业务流程与信息架构（续）</span></div>
+  <div style="height:5mm"></div>
+
+  <div class="sec">
+    <div class="sub"><span class="sn">4.2</span><b>改写任务状态机</b></div>
+    <div class="fig">
+      <svg viewBox="0 0 1000 430" xmlns="http://www.w3.org/2000/svg" font-family="PingFang SC, Microsoft YaHei, sans-serif">
+        <defs>
+          <marker id="ah2" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#8A8F9C"/></marker>
+          <marker id="ah3" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#B42318"/></marker>
+        </defs>
+        <g font-size="13" fill="#1A1C23">
+          <g><rect x="20" y="90" width="120" height="50" rx="9" fill="#F1F2F5" stroke="#C9CDD6"/><text x="80" y="120" text-anchor="middle">已创建</text></g>
+          <g><rect x="175" y="90" width="120" height="50" rx="9" fill="#F1F2F5" stroke="#C9CDD6"/><text x="235" y="120" text-anchor="middle">体检中</text></g>
+          <g><rect x="330" y="90" width="120" height="50" rx="9" fill="#F1F2F5" stroke="#C9CDD6"/><text x="390" y="120" text-anchor="middle">待确认平台</text></g>
+          <g><rect x="485" y="90" width="120" height="50" rx="9" fill="#FBF3E0" stroke="#E8B530"/><text x="545" y="120" text-anchor="middle" font-weight="700">改写中</text></g>
+          <g><rect x="640" y="90" width="120" height="50" rx="9" fill="#F1F2F5" stroke="#C9CDD6"/><text x="700" y="120" text-anchor="middle">待审阅</text></g>
+          <g><rect x="795" y="90" width="120" height="50" rx="9" fill="#E7F6EC" stroke="#7CC79A"/><text x="855" y="120" text-anchor="middle" font-weight="700">已导出/排期</text></g>
+          <g><rect x="795" y="300" width="120" height="50" rx="9" fill="#F1F2F5" stroke="#C9CDD6"/><text x="855" y="330" text-anchor="middle">已归档</text></g>
+          <!-- 失败支链 -->
+          <g><rect x="330" y="230" width="140" height="50" rx="9" fill="#FDECEC" stroke="#E5A3A3"/><text x="400" y="252" text-anchor="middle" fill="#B42318" font-weight="700">失败</text><text x="400" y="268" text-anchor="middle" font-size="11" fill="#B42318">（超时/依赖故障）</text></g>
+          <g><rect x="510" y="230" width="140" height="50" rx="9" fill="#FBF3E0" stroke="#E8B530"/><text x="580" y="252" text-anchor="middle" font-weight="700">降级出片</text><text x="580" y="268" text-anchor="middle" font-size="11">本地模板 · 不扣次数</text></g>
+          <g><rect x="510" y="330" width="140" height="46" rx="9" fill="#F1F2F5" stroke="#C9CDD6"/><text x="580" y="358" text-anchor="middle">排队待重跑</text></g>
+        </g>
+        <g stroke="#8A8F9C" stroke-width="1.5" fill="none" marker-end="url(#ah2)">
+          <path d="M140,115 L175,115"/><path d="M295,115 L330,115"/><path d="M450,115 L485,115"/>
+          <path d="M605,115 L640,115"/><path d="M760,115 L795,115"/>
+          <path d="M855,140 L855,300"/>
+          <path d="M580,280 L580,330"/>
+          <path d="M560,330 L545,140"/>
+        </g>
+        <g stroke="#B42318" stroke-width="1.5" fill="none" marker-end="url(#ah3)">
+          <path d="M520,140 L450,230"/>
+        </g>
+        <g stroke="#8A8F9C" stroke-width="1.5" fill="none" marker-end="url(#ah2)">
+          <path d="M470,255 L510,255"/>
+        </g>
+        <g font-size="11" fill="#6A707C">
+          <text x="150" y="105">上传完成</text>
+          <text x="300" y="105">体检通过</text>
+          <text x="455" y="105">用户确认</text>
+          <text x="610" y="105">四版产出</text>
+          <text x="765" y="105">用户导出</text>
+          <text x="475" y="215">第 2–3 步失败（归因到步骤）</text>
+          <text x="660" y="345">AI 恢复后自动重跑，精剪版覆盖降级版</text>
+          <text x="868" y="225">排期时间到达后提醒发布，7 天后归档</text>
+        </g>
+      </svg>
+      <div class="cap">图 4-2　改写任务全生命周期状态机。要点：失败不是终态——任何失败都必须给出可用的降级产物与重跑路径；已取消状态（任意态 → 已取消）从简省略。</div>
+    </div>
+
+    <div class="sub"><span class="sn">4.3</span><b>全局信息架构</b></div>
+    <div class="mono">Reframe App
+├── 首页（今日货架）
+│   ├── 新建再版（导入：相册 / 已发布链接）
+│   ├── 最近项目（续作入口，显示每项目四平台完成度）
+│   └── 热点提醒（订阅的品类热点，只读提示，不在 MVP 闭环内）
+├── 再版流程（任务态页面，无导航层级）
+│   ├── 素材体检 → 选择平台 → 改写中 → 四版输出 → 单版微调 → 导出排期
+│   └── 异常分支：失败归因 → 降级出片 → 排队重跑
+├── 货架手册（规则资产）
+│   ├── 官方层规则（只读，标注来源与更新日期）
+│   └── 用户层规则（可编辑/停用/导出，置信度标识）
+├── 数据回流（项目维度）
+│   └── 48h 四平台表现对比 → 一键「设为默认规则」
+└── 设置
+    ├── 订阅与改写次数  ├── 通知与排期提醒  └── 隐私与数据删除</div>
+  </div>
+  <div class="pf"><span>Reframe · 产品需求文档 V0.9</span><span>7</span></div>
+</div>
+
+<!-- ================= P8 4.4 RBAC + 五 intro + 5.1 ================= -->
+<div class="page">
+  <div class="ph"><b>REFRAME</b><span>四、权限矩阵 · 五、详细功能需求</span></div>
+  <div style="height:5mm"></div>
+
+  <div class="sec">
+    <div class="sub"><span class="sn">4.4</span><b>权限与角色矩阵（RBAC）</b></div>
+    <table class="tbl dense">
+      <tr><th>模块 \ 角色</th><th class="c" style="width:22mm">Owner<br>（付费账户）</th><th class="c" style="width:22mm">编辑者<br>（V1.5 席位）</th><th class="c" style="width:24mm">审阅者<br>（外部链接）</th><th class="c" style="width:24mm">平台管理员<br>（系统侧）</th></tr>
+      <tr><td>创建项目 / 导入素材</td><td class="c ok">✔</td><td class="c ok">✔</td><td class="c no">—</td><td class="c no">—</td></tr>
+      <tr><td>发起改写 / 消耗次数</td><td class="c ok">✔</td><td class="c ok">✔（计入 Owner 额度）</td><td class="c no">—</td><td class="c no">—</td></tr>
+      <tr><td>编辑版本（钩子/字幕/封面）</td><td class="c ok">✔</td><td class="c ok">✔</td><td class="c no">—</td><td class="c no">—</td></tr>
+      <tr><td>导出与排期</td><td class="c ok">✔</td><td class="c ok">✔</td><td class="c no">—</td><td class="c no">—</td></tr>
+      <tr><td>货架手册（用户层）</td><td class="c ok">读写/导出</td><td class="c ok">读写</td><td class="c">只读（如被分享）</td><td class="c no">—</td></tr>
+      <tr><td>货架手册（官方层）</td><td class="c">只读</td><td class="c">只读</td><td class="c">只读</td><td class="c ok">读写 + 灰度发布</td></tr>
+      <tr><td>成员与账单</td><td class="c ok">✔</td><td class="c no">—</td><td class="c no">—</td><td class="c">只读（客服场景）</td></tr>
+      <tr><td>审计日志查看</td><td class="c">本人操作</td><td class="c">本人操作</td><td class="c no">—</td><td class="c ok">全量（不可篡改）</td></tr>
+    </table>
+    <p class="small" style="margin-top:1.6mm">审阅者通过一次性签名链接访问，默认 72 小时过期，仅可查看四版对比与提交文字批注，不暴露源素材下载。</p>
+  </div>
+
+  <div class="sec">
+    <div class="sec-t"><span class="sec-n">05</span><h2>详细功能需求</h2></div>
+    <div class="rule"></div>
+    <p class="small">编号规则：FR-模块-序号；BR-业务规则。验收标准统一采用 Given/When/Then 格式，测试团队可直接拆解用例。原型阶段不定义 API 字段与数据表结构，仅定义输入、输出与系统行为。</p>
+
+    <div class="sub"><span class="sn">5.1</span><b>账号与工作区</b></div>
+    <div class="story">作为个体卖家，我希望不填任何表单就能先体验一次改写，以便判断值不值得注册。</div>
+    <ul class="tick tight">
+      <li><b>BR-101</b> 首次进入免注册，允许完成 1 次完整改写（水印导出）；注册后解锁无水印与货架手册。</li>
+      <li><b>BR-102</b> 注册方式：Google / Apple / 邮箱验证码；巴西市场默认货币 BRL，时区 America/Sao_Paulo。</li>
+      <li><b>BR-103</b> 异常分支：验证码 5 次错误锁定 10 分钟；第三方登录取消则留在引导页，不产生半成品账号。</li>
+    </ul>
+    <div class="gwt">
+      <div class="r g"><div class="k">GIVEN</div><div class="v">用户未注册</div></div>
+      <div class="r w"><div class="k">WHEN</div><div class="v">完成一次改写并点击「导出」</div></div>
+      <div class="r t"><div class="k">THEN</div><div class="v">弹出注册引导，明示「注册后去除水印并保留本次成果」；放弃注册仍可下载带水印版本</div></div>
+    </div>
+  </div>
+  <div class="pf"><span>Reframe · 产品需求文档 V0.9</span><span>8</span></div>
+</div>
+
+<!-- ================= P9 5.2 + 5.3 ================= -->
+<div class="page">
+  <div class="ph"><b>REFRAME</b><span>五、详细功能需求（续）</span></div>
+  <div style="height:5mm"></div>
+
+  <div class="sec">
+    <div class="sub"><span class="sn">5.2</span><b>素材导入与体检</b></div>
+    <div class="story">作为卖家，我希望 AI 先告诉我「它读到了什么、哪里有问题」，再决定要不要改写，以免浪费次数。</div>
+    <ul class="tick tight">
+      <li><b>FR-201</b> 导入来源：相册（默认选中最近一条）、已发布平台链接（自动剥离水印）。</li>
+      <li><b>FR-202</b> 体检输出：转写摘要（语言/时长/场景）、平台合规预检（水印、竖屏比例、时长）、画质问题（抖动/欠曝/背景杂乱）。</li>
+      <li><b>BR-201</b> 源视频限制：≤ 3 分钟、≤ 500MB、9:16 或可免费裁剪为 9:16；超限给明确原因与裁切建议。</li>
+      <li><b>BR-202</b> 体检不消耗改写次数；体检失败（如无法解析链接）不计入任何额度。</li>
+      <li><b>异常</b>：无声视频 → 提示「将按纯画面+字幕逻辑改写」；非支持语言 → 支持列表与转人工翻译的兜底说明。</li>
+    </ul>
+    <div class="gwt">
+      <div class="r g"><div class="k">GIVEN</div><div class="v">用户导入一条带 TikTok 水印的 38 秒竖屏视频</div></div>
+      <div class="r w"><div class="k">WHEN</div><div class="v">体检完成</div></div>
+      <div class="r t"><div class="k">THEN</div><div class="v">体检卡列出「水印将剥离」「时长适配四平台」与 ≥1 条画质问题；「开始改写」按钮可用</div></div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sub"><span class="sn">5.3</span><b>平台选择与规则预览</b></div>
+    <div class="story">作为卖家，我希望在消耗次数前就看到每个平台「要改什么、改几处」，以便决定是否值得四平台全发。</div>
+    <ul class="tick tight">
+      <li><b>FR-301</b> 平台卡片默认全选（TikTok / Reels / Shorts / Kwai），可取消；每张卡片列出该平台将应用的规则数与预计改动数。</li>
+      <li><b>FR-302</b> 规则预览逐条可见，标注来源（官方规范 / 我的货架手册）与置信度。</li>
+      <li><b>BR-301</b> 至少选择一个平台；单平台改写消耗 0.5 次，四平台 1 次（鼓励全发）。</li>
+      <li><b>BR-302</b> 官方层规则 24h 内同步一次；官方规范变更时，受影响的用户层规则标黄提醒复核。</li>
+    </ul>
+    <div class="gwt">
+      <div class="r g"><div class="k">GIVEN</div><div class="v">用户层规则「Shorts 字幕上移 6%」已存在</div></div>
+      <div class="r w"><div class="k">WHEN</div><div class="v">进入平台选择页</div></div>
+      <div class="r t"><div class="k">THEN</div><div class="v">Shorts 卡片显示该规则被应用、来源为「我的货架手册」；点击可查看规则原文与沉淀时间</div></div>
+    </div>
+  </div>
+  <div class="pf"><span>Reframe · 产品需求文档 V0.9</span><span>9</span></div>
+</div>
+
+<!-- ================= P10 5.4 + 5.5 ================= -->
+<div class="page">
+  <div class="ph"><b>REFRAME</b><span>五、详细功能需求（续）</span></div>
+  <div style="height:5mm"></div>
+
+  <div class="sec">
+    <div class="sub"><span class="sn">5.4</span><b>AI 改写流水线（进度与日志）</b></div>
+    <div class="story">作为卖家，我希望等待时能看到改写进行到哪一步、每步在做什么，而不是一个无信息的转圈。</div>
+    <ul class="tick tight">
+      <li><b>FR-401</b> 四阶段进度：转写解析 → 规则匹配 → 逐版改写 → 质检打包；每阶段显示真实日志行（可折叠）。</li>
+      <li><b>FR-402</b> 进度环显示整体百分比；阶段失败时进度停在该阶段并给出归因。</li>
+      <li><b>BR-401</b> 45 秒源视频四平台改写 P95 时长 ≤ 90 秒；超时阈值 180 秒，超时即触发失败流程（5.6）。</li>
+      <li><b>BR-402</b> 流水线可后台执行；App 切出时推送完成通知。任务中断（杀进程/断网）后恢复进入，从最近检查点继续。</li>
+      <li><b>异常</b>：转写置信度 &lt; 85% 时，在「待审阅」阶段对字幕块标黄，要求用户校对后导出（不阻断流程）。</li>
+    </ul>
+    <div class="gwt">
+      <div class="r g"><div class="k">GIVEN</div><div class="v">改写任务处于「规则匹配」阶段</div></div>
+      <div class="r w"><div class="k">WHEN</div><div class="v">该阶段耗时超过 180 秒</div></div>
+      <div class="r t"><div class="k">THEN</div><div class="v">任务转入「失败」态，页面归因到「规则匹配」步骤，并提供「重试 / 本地模板出片 / 稍后再试」三个出口</div></div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sub"><span class="sn">5.5</span><b>四版输出与单版微调</b></div>
+    <div class="story">作为卖家，我希望看到四个版本哪里不一样、为什么这么改，并且只改动我不满意的那一版。</div>
+    <ul class="tick tight">
+      <li><b>FR-501</b> 输出页 KPI：生成版本数、应用规则数、版权音乐替换数、沉淀新规则数；四版卡片并排，标注差异点数量。</li>
+      <li><b>FR-502</b> 单版微调：替换钩子（3 候选）、调整字幕位置、更换封面、更换版权音乐；每次改动实时预览。</li>
+      <li><b>FR-503</b> 「这一版为什么这样改？」抽屉：逐条列出本版应用的规则、来源（官方/手册）、置信度与生效时间。</li>
+      <li><b>BR-501</b> 微调不消耗改写次数；整版重新生成消耗 0.5 次。</li>
+      <li><b>BR-502</b> 字幕默认落在跨平台安全区交集（1080×1920 画布内 720×960 安全框：上边距 290px、下边距 670px、左 120px、右 240px）。</li>
+    </ul>
+    <div class="gwt">
+      <div class="r g"><div class="k">GIVEN</div><div class="v">四版已生成，用户对 Reels 版的钩子不满意</div></div>
+      <div class="r w"><div class="k">WHEN</div><div class="v">在微调页选择候选钩子 2 并确认</div></div>
+      <div class="r t"><div class="k">THEN</div><div class="v">仅 Reels 版重新合成并预览；其余三版不变；改写次数余额不变</div></div>
+    </div>
+  </div>
+  <div class="pf"><span>Reframe · 产品需求文档 V0.9</span><span>10</span></div>
+</div>
+
+<!-- ================= P11 5.6 + 5.7 ================= -->
+<div class="page">
+  <div class="ph"><b>REFRAME</b><span>五、详细功能需求（续）</span></div>
+  <div style="height:5mm"></div>
+
+  <div class="sec">
+    <div class="sub"><span class="sn">5.6</span><b>失败与降级</b></div>
+    <div class="story">作为卖家，我希望 AI 挂了也能拿到能发的版本，而不是白等一场——我可以先发了再说。</div>
+    <ul class="tick tight">
+      <li><b>FR-601</b> 失败页三要素：归因到具体步骤（转写/规则匹配/改写/打包）、本次不扣次数承诺、三条出口（重试 / 本地模板出片 / 稍后再试）。</li>
+      <li><b>FR-602</b> 降级出片：本地规则模板按用户货架手册直接拼装（钩子模板句 + 字幕 + 封面），页面显著标注「本地版 · 未应用 AI 优化」。</li>
+      <li><b>BR-601</b> 降级版导出含水印角标「Draft」；AI 精剪完成后推送通知，用户可一键替换为精剪版。</li>
+      <li><b>BR-602</b> 降级任务自动进入重跑队列；同一任务最多自动重跑 2 次，仍失败则转人工支持工单。</li>
+      <li><b>异常</b>：本地模板也失败（极端情况：素材损坏）→ 明确告知「该素材不可用」，引导重新导入，不留死路。</li>
+    </ul>
+    <div class="gwt">
+      <div class="r g"><div class="k">GIVEN</div><div class="v">任务在「规则匹配」超时失败，用户选择「本地模板出片」</div></div>
+      <div class="r w"><div class="k">WHEN</div><div class="v">降级版生成完成</div></div>
+      <div class="r t"><div class="k">THEN</div><div class="v">四版可导出且标注 Draft；任务进入重跑队列；改写次数未扣减</div></div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sub"><span class="sn">5.7</span><b>导出与排期</b></div>
+    <div class="story">作为卖家，我希望一次拿走四个平台要发的全部文件，并有人提醒我按平台错峰发。</div>
+    <ul class="tick tight">
+      <li><b>FR-701</b> 导出包：四版 MP4（1080×1920，各平台编码预设）+ SRT 字幕 + 封面图 + 改写清单 manifest（供平台 AI 标识申报）。</li>
+      <li><b>FR-702</b> 排期建议：按目标市场错峰（TikTok 首发 → Shorts +6–12h → Reels +12–24h），到点推送发布提醒。</li>
+      <li><b>BR-701</b> 未注册导出含水印；免费档导出分辨率 1080p 封顶。</li>
+      <li><b>BR-702</b> 导出记录保留 90 天，与源视频删除策略一致（见 2.5）。</li>
+    </ul>
+    <div class="gwt">
+      <div class="r g"><div class="k">GIVEN</div><div class="v">用户已导出四版并开启排期</div></div>
+      <div class="r w"><div class="k">WHEN</div><div class="v">到达 Shorts 建议发布时间</div></div>
+      <div class="r t"><div class="k">THEN</div><div class="v">收到推送，点击直达该版本的本地文件与发布清单核对项</div></div>
+    </div>
+  </div>
+  <div class="pf"><span>Reframe · 产品需求文档 V0.9</span><span>11</span></div>
+</div>
+
+<!-- ================= P12 5.8 + 5.9 ================= -->
+<div class="page">
+  <div class="ph"><b>REFRAME</b><span>五、详细功能需求（续）</span></div>
+  <div style="height:5mm"></div>
+
+  <div class="sec">
+    <div class="sub"><span class="sn">5.8</span><b>货架手册（规则资产）</b></div>
+    <div class="story">作为卖家，我希望这次学到的「Shorts 字幕别贴底」下次自动生效，不用我记。</div>
+    <ul class="tick tight">
+      <li><b>FR-801</b> 规则沉淀入口：微调页的每次手动修正，询问「下次都这样做？」；确认即入用户层规则。</li>
+      <li><b>FR-802</b> 手册页：官方层（只读，标注来源与更新日期）/ 用户层（可停用、编辑、导出 JSON）。</li>
+      <li><b>BR-801</b> 用户层规则带置信度：被数据回流验证 +1 级，被用户撤销归零并停用。</li>
+      <li><b>BR-802</b> 用户层规则优先级高于官方层；冲突时界面显式提示并让用户裁决。</li>
+    </ul>
+    <div class="gwt">
+      <div class="r g"><div class="k">GIVEN</div><div class="v">用户在修正页将 Shorts 字幕上移 6% 并确认「下次都这样做」</div></div>
+      <div class="r w"><div class="k">WHEN</div><div class="v">下一个项目进入改写</div></div>
+      <div class="r t"><div class="k">THEN</div><div class="v">该规则自动应用于 Shorts 版，规则抽屉中标注来源为「我的货架手册」</div></div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sub"><span class="sn">5.9</span><b>数据回流与建议</b></div>
+    <div class="story">作为卖家，我希望发完 48 小时后知道哪个平台、哪个钩子真正带来了流量。</div>
+    <ul class="tick tight">
+      <li><b>FR-901</b> 发布后 48h 引导用户回填或授权拉取四平台基础数据（播放/完播/进店）；产出对比视图与「胜出钩子」结论。</li>
+      <li><b>BR-901</b> 「设为默认规则」一键沉淀：胜出钩子类型进入用户层规则库。</li>
+      <li><b>异常</b>：用户不回填则该任务停留在「数据缺失」态，不阻塞新项目。</li>
+    </ul>
+    <div class="gwt">
+      <div class="r g"><div class="k">GIVEN</div><div class="v">某项目的 48h 数据显示 Reels 版「提问式钩子」完播率显著高于其他三版</div></div>
+      <div class="r w"><div class="k">WHEN</div><div class="v">用户点击「设为默认规则」</div></div>
+      <div class="r t"><div class="k">THEN</div><div class="v">「Reels 优先使用提问式钩子」进入用户层规则库，置信度 +1，下次改写自动生效</div></div>
+    </div>
+  </div>
+  <div class="pf"><span>Reframe · 产品需求文档 V0.9</span><span>12</span></div>
+</div>
+
+<!-- ================= P13 六、集成与数据 ================= -->
+<div class="page">
+  <div class="ph"><b>REFRAME</b><span>六、集成与数据需求</span></div>
+  <div style="height:5mm"></div>
+
+  <div class="sec">
+    <div class="sec-t"><span class="sec-n">06</span><h2>集成与数据需求</h2></div>
+    <div class="rule"></div>
+
+    <div class="sub"><span class="sn">6.1</span><b>外部系统依赖与降级方案</b></div>
+    <table class="tbl dense">
+      <tr><th style="width:26mm">依赖</th><th>用途</th><th class="c" style="width:16mm">级别</th><th>降级方案</th></tr>
+      <tr><td>ASR 转写服务</td><td>口播识别（pt-BR 优先）</td><td class="c"><span class="tag r">强依赖</span></td><td>转写失败 → 按纯画面逻辑改写，字幕留空待人工</td></tr>
+      <tr><td>LLM 改写服务</td><td>钩子/文案改写</td><td class="c"><span class="tag r">强依赖</span></td><td>超时 → 本地模板句库兜底（5.6 降级路径）</td></tr>
+      <tr><td>对象存储 + CDN</td><td>素材与产物分发</td><td class="c"><span class="tag r">强依赖</span></td><td>双区域冗余；单区域故障切换只读导出</td></tr>
+      <tr><td>授权曲库服务</td><td>各平台版权音乐替换</td><td class="c"><span class="tag a">弱依赖</span></td><td>曲库不可用 → 保留原声并标注版权风险，不替换</td></tr>
+      <tr><td>支付网关（Pix/卡）</td><td>订阅与次数包</td><td class="c"><span class="tag a">弱依赖</span></td><td>支付故障期间到期账户宽限 72h，功能不受影响</td></tr>
+      <tr><td>平台数据接口</td><td>48h 数据回流</td><td class="c"><span class="tag a">弱依赖</span></td><td>接口受限 → 引导手动回填截图识别（OCR）</td></tr>
+    </table>
+
+    <div class="sub"><span class="sn">6.2</span><b>数据流转</b></div>
+    <p class="small">源视频 →（上传，TLS）→ 临时存储（加密，90 天 TTL）→ ASR/视觉解析 → 改写任务（规则快照版本号随任务存档，保证可复现）→ 产物（四版 + manifest）→ 导出后进入 90 天归档 → 到期自动清除。数据回流仅采集用户授权的项目级指标，不采集受众个人数据。跨区域传输遵守 2.5 节数据出境约束。</p>
+
+    <div class="sub"><span class="sn">6.3</span><b>数据埋点与报表</b></div>
+    <table class="tbl dense">
+      <tr><th style="width:34mm">埋点事件</th><th>维度</th><th style="width:44mm">服务的核心指标</th></tr>
+      <tr><td>project_created</td><td>导入来源、素材时长、画质分</td><td>漏斗起点；素材质量分布</td></tr>
+      <tr><td>rewrite_started / _succeeded / _failed</td><td>平台组合、阶段、耗时、失败归因</td><td>成功率（≥92%）；阶段耗时 P95</td></tr>
+      <tr><td>degraded_rendered</td><td>触发原因、是否后续被精剪替换</td><td>降级可用率（100%）；兜底接受度</td></tr>
+      <tr><td>rule_created / _applied / _revoked</td><td>官方/用户层、平台、置信度</td><td>规则资产增速与复用次数</td></tr>
+      <tr><td>export_completed</td><td>版本数、是否排期、分辨率</td><td>北极星：四平台全发任务数</td></tr>
+      <tr><td>reflow_submitted</td><td>48h 各平台播放/完播/进店</td><td>钩子胜率；规则置信度更新依据</td></tr>
+    </table>
+    <p class="small">后台看板维度：按周（北极星、成功率、降级率）、按平台（规则命中率、失败归因分布）、按队列（流水线阶段耗时热力）。</p>
+  </div>
+  <div class="pf"><span>Reframe · 产品需求文档 V0.9</span><span>13</span></div>
+</div>
+
+<!-- ================= P14 七、NFR ================= -->
+<div class="page">
+  <div class="ph"><b>REFRAME</b><span>七、非功能性需求</span></div>
+  <div style="height:5mm"></div>
+
+  <div class="sec">
+    <div class="sec-t"><span class="sec-n">07</span><h2>非功能性需求（NFR）</h2></div>
+    <div class="rule"></div>
+
+    <div class="sub"><span class="sn">7.1</span><b>性能</b></div>
+    <table class="tbl dense">
+      <tr><th>指标</th><th style="width:52mm">目标值</th></tr>
+      <tr><td>核心 API 响应（列表/详情/规则读取）</td><td>P95 &lt; 300ms</td></tr>
+      <tr><td>App 首屏可交互（4G，中端 Android）</td><td>&lt; 2.5s</td></tr>
+      <tr><td>45 秒源视频四平台改写</td><td>P95 ≤ 90s；硬超时 180s 转失败流程</td></tr>
+      <tr><td>并发改写任务（MVP 容量设计点）</td><td>500 并发，排队等待 ≤ 2 分钟</td></tr>
+    </table>
+
+    <div class="sub"><span class="sn">7.2</span><b>高可用与容灾</b></div>
+    <p class="small">核心链路 SLA 99.9%（月度不可用 ≤ 43 分钟）；RTO ≤ 1 小时，RPO ≤ 5 分钟。改写流水线无状态化，任务状态持久化于队列与对象存储，单节点故障自动重试；AI 依赖故障不视为系统故障，由 5.6 降级路径承接。</p>
+
+    <div class="sub"><span class="sn">7.3</span><b>安全与审计</b></div>
+    <ul class="tick tight">
+      <li><b>认证</b>：OAuth 2.0 / OIDC（Google、Apple），邮箱 OTP；V3.0 企业版支持 SSO/SAML 与 MFA 强制。</li>
+      <li><b>加密</b>：传输 TLS 1.3；静态 AES-256；素材下载使用短时签名 URL（15 分钟）。</li>
+      <li><b>审计日志</b>：规则变更、导出、手册分享、账单变更、管理员访问均留痕，追加写不可篡改，保留 180 天；审阅链接的每次访问记录 IP 与时间。</li>
+      <li><b>内容安全</b>：导入素材做违规内容检测（暴力/侵权画面），命中即拒绝并告知原因。</li>
+    </ul>
+
+    <div class="sub"><span class="sn">7.4</span><b>可观测性</b></div>
+    <p class="small">结构化日志（trace_id 贯穿客户端任务 ID 与服务端流水线）；核心指标：阶段耗时、失败归因分布、队列深度、降级率；告警阈值：改写成功率 5 分钟窗口 &lt; 85% 触发值班告警，&lt; 70% 自动开启降级模式（9.2）。</p>
+
+    <div class="sub"><span class="sn">7.5</span><b>兼容性与国际化</b></div>
+    <table class="tbl dense">
+      <tr><th style="width:34mm">维度</th><th>要求</th></tr>
+      <tr><td>客户端</td><td>iOS 15+ / Android 9+；Web 审阅端支持 Chrome、Safari 最近两个大版本</td></tr>
+      <tr><td>语言</td><td>V1.0：pt-BR、en；V1.5：id-ID；V2.0：ar（完整 RTL 布局镜像，含数字与图标方向）</td></tr>
+      <tr><td>时区与货币</td><td>排期一律按用户本地时区；定价本地化（BRL / USD），货币精度两位小数</td></tr>
+      <tr><td>无障碍</td><td>关键流程可旁白操作；字幕预览提供对比度合规样式（WCAG AA）</td></tr>
+    </table>
+
+    <div class="sub"><span class="sn">7.6</span><b>合规要求</b></div>
+    <p class="small">数据保留：源视频与产物 90 天、项目元数据 2 年、审计日志 180 天；用户删除请求 72h 内完成并出具确认；巴西用户数据优先存储于南美区域；隐私政策明示 AI 处理目的，素材不用于模型训练（除非单独授权）。</p>
+  </div>
+  <div class="pf"><span>Reframe · 产品需求文档 V0.9</span><span>14</span></div>
+</div>
+
+<!-- ================= P15 八、风险 ================= -->
+<div class="page">
+  <div class="ph"><b>REFRAME</b><span>八、原型验证与技术风险</span></div>
+  <div style="height:5mm"></div>
+
+  <div class="sec">
+    <div class="sec-t"><span class="sec-n">08</span><h2>原型验证与技术风险</h2></div>
+    <div class="rule"></div>
+
+    <div class="sub"><span class="sn">8.1</span><b>关键技术假设</b></div>
+    <ul class="tick tight">
+      <li>pt-BR 口语场景（带货口播、背景嘈杂）ASR 词错率可控，转写置信度 ≥ 85% 的比例 ≥ 90%；</li>
+      <li>LLM 在小语种（葡语/印尼语）的钩子改写质量达到「可发布」水位，人工微调率 &lt; 40%；</li>
+      <li>四平台官方规范季度级变更，规则引擎官方层可配置化更新，无需发版；</li>
+      <li>单任务改写成本（ASR+LLM+渲染）可压至订阅档位毛利的 30% 以内。</li>
+    </ul>
+
+    <div class="sub"><span class="sn">8.2</span><b>本轮原型（PoC）验证清单</b></div>
+    <table class="tbl dense">
+      <tr><th style="width:8mm">#</th><th>高风险技术点</th><th style="width:46mm">验证方式与通过标准</th></tr>
+      <tr><td>1</td><td>水印剥离后画质损失与平台识别规避</td><td>50 条样本，目检无可见损伤 ≥ 95%</td></tr>
+      <tr><td>2</td><td>字幕安全区自动重排的稳定性（含 RTL 预研）</td><td>四平台预览机检测 0 遮挡</td></tr>
+      <tr><td>3</td><td>版权音乐替换的节拍对齐与音量均衡</td><td>人耳盲测通过 ≥ 80%</td></tr>
+      <tr><td>4</td><td>降级链路的端到端可用性（断 AI 出片）</td><td>故障注入演练 100% 出片</td></tr>
+    </table>
+
+    <div class="sub"><span class="sn">8.3</span><b>已知风险与应对</b></div>
+    <table class="tbl dense">
+      <tr><th style="width:40mm">风险</th><th style="width:14mm" class="c">等级</th><th>应对（B 计划）</th></tr>
+      <tr><td>平台规范频繁变动，规则维护成本侵蚀毛利</td><td class="c"><span class="tag r">高</span></td><td>官方层规则配置化 + 变更监控爬虫；用户层规则分摊长尾场景</td></tr>
+      <tr><td>平台官方下场做一键多平台分发</td><td class="c"><span class="tag r">高</span></td><td>差异化押注跨平台中立性 + 用户私有规则资产（平台不会替用户沉淀跨竞品规则）</td></tr>
+      <tr><td>个体卖家付费能力低于预期</td><td class="c"><span class="tag a">中</span></td><td>定价锚定「一条多出订单的利润」；次数包按需购买降低门槛</td></tr>
+      <tr><td>音乐版权曲库覆盖不足</td><td class="c"><span class="tag a">中</span></td><td>弱依赖设计：保留原声 + 风险提示，替换为可选项</td></tr>
+      <tr><td>AI 输出质量投诉归因错位（素材差怪 AI）</td><td class="c"><span class="tag a">中</span></td><td>体检前置暴露素材问题；失败归因到具体步骤与素材段</td></tr>
+    </table>
+  </div>
+  <div class="pf"><span>Reframe · 产品需求文档 V0.9</span><span>15</span></div>
+</div>
+
+<!-- ================= P16 九、运营 ================= -->
+<div class="page">
+  <div class="ph"><b>REFRAME</b><span>九、运营与交付要求</span></div>
+  <div style="height:5mm"></div>
+
+  <div class="sec">
+    <div class="sec-t"><span class="sec-n">09</span><h2>运营与交付要求</h2></div>
+    <div class="rule"></div>
+
+    <div class="sub"><span class="sn">9.1</span><b>冷启动与初始化</b></div>
+    <p class="small">新用户默认装载四平台官方规则包（含安全区、音乐版权、字幕习惯、封面规范）与 3 条品类示例规则；首次导入赠送 1 次免费改写；新手引导只覆盖「导入 → 改写 → 导出」三步，不强制阅读教程。</p>
+
+    <div class="sub"><span class="sn">9.2</span><b>灰度发布与降级策略（Feature Flag）</b></div>
+    <table class="tbl dense">
+      <tr><th style="width:34mm">开关</th><th>说明</th></tr>
+      <tr><td>ai_pipeline_v2</td><td>新改写流水线灰度，按 5% → 25% → 100% 推进</td></tr>
+      <tr><td>degraded_mode_global</td><td>极端故障时一键切全量本地模板出片（保底可用）</td></tr>
+      <tr><td>platform_&lt;name&gt;_off</td><td>单平台紧急下线（如某平台条款突变），其余平台不受影响</td></tr>
+      <tr><td>ruleset_&lt;version&gt;</td><td>官方规则包版本灰度，可单平台回滚</td></tr>
+    </table>
+
+    <div class="sub"><span class="sn">9.3</span><b>客服与错误码字典（节选）</b></div>
+    <table class="tbl dense">
+      <tr><th style="width:20mm">错误码</th><th>含义</th><th>用户侧话术与动作</th></tr>
+      <tr><td>RF-1001</td><td>素材超限（时长/体积）</td><td>明示上限与裁切建议，一键裁切</td></tr>
+      <tr><td>RF-2013</td><td>改写阶段超时</td><td>归因到步骤，提供三出口（5.6）</td></tr>
+      <tr><td>RF-3002</td><td>曲库服务不可用</td><td>保留原声导出，标注版权风险</td></tr>
+      <tr><td>RF-4001</td><td>导出包生成失败</td><td>自动重试 2 次后转工单，产物保留 72h</td></tr>
+    </table>
+    <p class="small">帮助体系：App 内嵌帮助中心（葡语优先）+ 错误页一键附带 trace_id 报障；工单系统按错误码自动分类。</p>
+  </div>
+  <div class="pf"><span>Reframe · 产品需求文档 V0.9</span><span>16</span></div>
+</div>
+
+<!-- ================= P17 附录 A 原型截图 1 ================= -->
+<div class="page">
+  <div class="ph"><b>REFRAME</b><span>十、附录 A · 可点击原型与界面索引（1/2）</span></div>
+  <div style="height:5mm"></div>
+
+  <div class="sec">
+    <div class="sec-t"><span class="sec-n">10</span><h2>附录</h2></div>
+    <div class="rule"></div>
+    <p><b>附录 A：可点击原型。</b>原型为单文件 HTML（<span class="small">reframe/index.html</span>），浏览器直接打开，无需登录；共 13 屏，覆盖正常流与失败降级流。控制台提供「自动演示」（约 2 分钟走查全流程）与「模拟 AI 超时」开关（演示 5.6 降级路径）。以下为界面索引（1/2）：</p>
+    <div class="shots" style="margin-top:2mm">
+      <div class="shot"><img src="reframe/shots/enter.png" alt=""><div class="sl">S01 首页 · 新建再版与最近项目</div></div>
+      <div class="shot"><img src="reframe/shots/import.png" alt=""><div class="sl">S02 导入 · 相册与已发布链接</div></div>
+      <div class="shot"><img src="reframe/shots/brief.png" alt=""><div class="sl">S03 素材体检 · 读到什么/哪里有问题</div></div>
+      <div class="shot"><img src="reframe/shots/platforms.png" alt=""><div class="sl">S04 选择平台 · 规则与改动数前置</div></div>
+      <div class="shot"><img src="reframe/shots/processing.png" alt=""><div class="sl">S05 改写中 · 四阶段进度与日志</div></div>
+      <div class="shot"><img src="reframe/shots/output.png" alt=""><div class="sl">S06 四版输出 · KPI 与差异标注</div></div>
+      <div class="shot"><img src="reframe/shots/refine.png" alt=""><div class="sl">S07 单版微调 · 钩子/字幕/封面/音乐</div></div>
+      <div class="shot"><img src="reframe/shots/export.png" alt=""><div class="sl">S08 导出排期 · 错峰发布建议</div></div>
+    </div>
+  </div>
+  <div class="pf"><span>Reframe · 产品需求文档 V0.9</span><span>17</span></div>
+</div>
+
+<!-- ================= P18 附录 A 截图 2 + 附录 B ================= -->
+<div class="page">
+  <div class="ph"><b>REFRAME</b><span>十、附录（2/2）</span></div>
+  <div style="height:5mm"></div>
+
+  <div class="sec">
+    <p style="margin-bottom:2mm"><b>附录 A（续）：异常与资产界面索引（2/2）</b></p>
+    <div class="shots" style="grid-template-columns:repeat(5,1fr)">
+      <div class="shot"><img src="reframe/shots/fail.png" alt=""><div class="sl">S09 失败归因 · 不扣次数三出口</div></div>
+      <div class="shot"><img src="reframe/shots/degraded.png" alt=""><div class="sl">S10 降级出片 · 本地模板保底</div></div>
+      <div class="shot"><img src="reframe/shots/fix.png" alt=""><div class="sl">S11 结果不理想 · 安全区可视化修正</div></div>
+      <div class="shot"><img src="reframe/shots/rules.png" alt=""><div class="sl">S12 货架手册 · 官方层/用户层</div></div>
+      <div class="shot"><img src="reframe/shots/review.png" alt=""><div class="sl">S13 数据回流 · 48h 对比与规则沉淀</div></div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <p style="margin-bottom:2mm"><b>附录 B：原始需求池（本期未纳入，留存评估）</b></p>
+    <table class="tbl dense">
+      <tr><th style="width:44mm">需求</th><th>来源</th><th style="width:30mm" class="c">处置</th></tr>
+      <tr><td>直播间切片自动再版</td><td>代理商访谈</td><td class="c"><span class="tag b">V2.0 评估</span></td></tr>
+      <tr><td>货架手册市场（规则包交易/订阅）</td><td>内部脑暴</td><td class="c"><span class="tag b">V2.0 评估</span></td></tr>
+      <tr><td>竞品账号改写策略监测</td><td>卖家社群</td><td class="c"><span class="tag n">搁置（合规风险待评估）</span></td></tr>
+      <tr><td>AI 脚本生成（拍摄前）</td><td>卖家社群</td><td class="c"><span class="tag n">搁置（与「再版」定位冲突）</span></td></tr>
+      <tr><td>WhatsApp 发货提醒联动</td><td>巴西卖家访谈</td><td class="c"><span class="tag n">搁置（非再版链路）</span></td></tr>
+    </table>
+    <div class="qbox" style="margin-top:3mm">文档边界声明：本 PRD 定义「输入、输出与系统行为」（黑盒），不定义数据库表结构与 API 字段——后者由研发在架构设计中产出，并回链至本文档 1.3 参考资料。</div>
+  </div>
+  <div class="pf"><span>Reframe · 产品需求文档 V0.9</span><span>18</span></div>
+</div>
+
+</body>
+</html>
